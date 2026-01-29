@@ -4,7 +4,7 @@ import { loginUser, logoutUser, registerUser } from './controllers/auth.controll
 import cookieParser from 'cookie-parser';
 import connectDB from './dbConnect/db.js';
 import { userAuthMiddle } from './middlewares/authMiddle.js';
-import { createContent } from './controllers/content.controller.js';
+import { createContent, deleteContent, getContent, shareContent, shareLink } from './controllers/content.controller.js';
 
 const app:express.Application = express();
 
@@ -22,7 +22,12 @@ app.post('/api/v1/signup',registerUser);
 app.post('/api/v1/signin',loginUser);
 app.post('/api/v1/logout',logoutUser);
 
-app.post('/api/v1/content',userAuthMiddle,createContent);
+app.post('/api/v1/content', userAuthMiddle, createContent);
+app.post('/api/v1/getContent', userAuthMiddle, getContent);
+app.delete('/api/v1/deletecontent', userAuthMiddle, deleteContent);
+app.post('/api/v1/brain/share', userAuthMiddle, shareContent);
+app.post('/api/v1/brain/:shareLink', userAuthMiddle, shareLink);
+
 
 
 const PORT = process.env.PORT;

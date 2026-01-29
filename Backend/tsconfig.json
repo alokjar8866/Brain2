@@ -9,7 +9,11 @@
     // See also https://aka.ms/tsconfig/module
     "module": "nodenext",
     "target": "esnext",
-    "types": [],
+    "types":[],
+    "typeRoots": [
+      "./node_modules/@types", //Remove this to go back at checkpoint 1
+      "./src/types"
+    ],
     // For nodejs:
     // "lib": ["esnext"],
     // "types": ["node"],
@@ -22,7 +26,7 @@
 
     // Stricter Typechecking Options
     "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
+    "exactOptionalPropertyTypes": true,  //checkpoint 1
 
     // Style Options
     // "noImplicitReturns": true,
@@ -40,5 +44,9 @@
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
-  }
+  },
+
+  "include": [
+    "src/**/*" //Remove to go back checkpoint 1
+  ]
 }
