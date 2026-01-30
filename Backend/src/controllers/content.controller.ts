@@ -4,7 +4,7 @@ import { LinkModel } from "../models/link.model.js";
 import { randomStr } from "../utils/randomStr.js"
 import { UserModel } from "../models/user.model.js";
 
-
+//add the type of link which is used in schema.....DIL
 export const createContent: RequestHandler = async (req, res) => {
 
     try {
