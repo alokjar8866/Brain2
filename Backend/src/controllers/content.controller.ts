@@ -8,15 +8,15 @@ import { UserModel } from "../models/user.model.js";
 export const createContent: RequestHandler = async (req, res) => {
 
     try {
-        const { title, link, tags } = req.body;
-        const authorId = (req as any).user._id;
+        const { title, link } = req.body;
+        /** const authorId = (req as any).user._id;  //_id **/
 
         const newContent = await ContentModel.create({
             title,
             link,
-            //@ts-ignore
-            userId: authorId,
-            tags: tags || []
+            type:req.body.type,
+            userId: req.userId,
+            tags:[]
         })
 
         res.status(201).json({
@@ -34,7 +34,7 @@ export const createContent: RequestHandler = async (req, res) => {
 
 
 export const getContent: RequestHandler = async (req, res) => {
-    //@ts-ignore
+    
     const userId = req.userId;
     const content = await ContentModel.find({
         userId: userId
