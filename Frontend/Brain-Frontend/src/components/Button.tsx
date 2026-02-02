@@ -7,12 +7,12 @@ interface ButtonProps{
     text: string;
     startIcon?: ReactElement;
     endIcon?: ReactElement;
-    onClick: ()=>void;
+    onClick?: ()=>void;
 }
 
 const variantStyles = {
-    "primary": "bg-purple-600 text-white font-semibold border border-black",
-    "secondary": "bg-purple-400 text-purple-800 font-semibold border border-black"
+    "primary": "bg-purple-600 text-black font-semibold border border-black",
+    "secondary": "bg-gray-400 text-black font-semibold border border-black"
 }
 
 const sizeStyles = {
@@ -22,10 +22,10 @@ const sizeStyles = {
 }
 
 
-const defaultStyles = "rounded-md p-4 flex"
+const defaultStyles = "h-8 w-38 rounded-md p-4 flex items-center justify-center"
 
 export const Button = (props:ButtonProps) =>{
-    return <button className={`flex items-center ${variantStyles[props.variant]} ${defaultStyles} ${sizeStyles[props.size]}` }>
+    return <button onClick={props.onClick} className={`${variantStyles[props.variant]} ${defaultStyles} ${sizeStyles[props.size]}` }>
         {props.startIcon ? <div>{props.startIcon}</div>: null}
         <div className="pl-2 pr-2">
             {props.text}
