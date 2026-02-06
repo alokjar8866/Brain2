@@ -24,7 +24,7 @@ const sizeStyles = {
 }
 
      
-const defaultStyles = "flex inline-flex items-center "
+const defaultStyles = "flex inline-flex items-center justify-center"
 
 export const Button = (props:ButtonProps) =>{
 
