@@ -9,12 +9,12 @@ interface ButtonProps{
     endIcon?: ReactElement;
     onClick?: ()=>void;
     fullWidth?:boolean;
-    loading?:boolean
+    isLoading?:boolean
 }
 
 const variantStyles = {
-    "primary": "bg-purple-600 text-black font-semibold border border-black",
-    "secondary": "bg-gray-400 text-black font-semibold border border-black"
+    "primary": "bg-blue-900 rounded-lg border-2 border-white text-white font-semibold hover:bg-blue-700",
+    "secondary": "bg-gray-900 rounded-lg border-2 border-white text-white font-semibold hover:bg-gray-700"
 }
 
 const sizeStyles = {
@@ -23,18 +23,26 @@ const sizeStyles = {
     "lg":"py-4 px-6"
 }
 
-
-const defaultStyles = "h-8 w-38 rounded-md p-4 flex items-center justify-center"
+     
+const defaultStyles = "flex inline-flex items-center "
 
 export const Button = (props:ButtonProps) =>{
-    return <button onClick={props.onClick} className={`${variantStyles[props.variant]} ${defaultStyles} ${sizeStyles[props.size]} ${props.fullWidth?" w-full":""}` }>
+
+     return <button 
+    onClick={props.onClick} 
+    className={`
+    ${variantStyles[props.variant]} 
+    ${defaultStyles} 
+    ${sizeStyles[props.size]} 
+    ${props.fullWidth?" w-full":""}` }>
+
         {props.startIcon ? <div>{props.startIcon}</div>: null}
+        
         <div className="pl-2 pr-2">
             {props.text}
         </div>
         {props.endIcon}
-    </button>
+    </button> 
 }
 
 
-//<Button endIcon={"+"} size="md" variant="primary" text="submit" startIcon={"-"} onClick={()=>{}}/>
