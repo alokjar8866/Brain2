@@ -5,11 +5,12 @@ import cookieParser from 'cookie-parser';
 import connectDB from './dbConnect/db.js';
 import { userAuthMiddle } from './middlewares/authMiddle.js';
 import { createContent, deleteContent, getContent, shareContent, shareLink } from './controllers/content.controller.js';
-
+import cors from "cors";
 const app:express.Application = express();
 
 app.use(cookieParser());
 app.use(express.json());
+app.use(cors());
 
 connectDB();
 

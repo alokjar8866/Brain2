@@ -4,7 +4,12 @@ import { UserModel } from "../models/user.model.js";
 
 export const userAuthMiddle: RequestHandler = async (req, res, next:NextFunction) => {
     //const token = req.cookies.token;
-    const token = req.headers["authorization"];
+    const authHeader = req.headers["authorization"];
+    //const token = req.headers["authorization"];
+    if (!authHeader || typeof authHeader !== "string") {
+        return res.status(403).json({ message: "Invalid Authorization Header" });
+    }
+    const token = authHeader && authHeader.split(" ")[1];
     if (!token) {
         return res.status(401).json({
             msg: "Please Create Account & Login First"

@@ -14,9 +14,9 @@ export const createContent: RequestHandler = async (req, res) => {
         const newContent = await ContentModel.create({
             title,
             link,
-            type:req.body.type,
+            type: req.body.type,
             userId: req.userId,
-            tags:[]
+            tags: []
         })
 
         res.status(201).json({
@@ -34,15 +34,26 @@ export const createContent: RequestHandler = async (req, res) => {
 
 
 export const getContent: RequestHandler = async (req, res) => {
-    
-    const userId = req.userId;
-    const content = await ContentModel.find({
-        userId: userId
-    }).populate("userId", "username")
 
-    res.json({
-        content
-    })
+    try {
+        const userId = req.userId;
+        if (!userId) {
+            res.status(403).json({ message: "User not authenticated" });
+            return;
+        }
+        const content = await ContentModel.find({
+            userId: userId
+        }).populate("userId", "username")
+
+        res.json({
+            content
+        })
+    }
+    catch (e) {
+        res.status(500).json({
+            message: "Internal server error"
+        })
+    }
 
 }
 
@@ -50,7 +61,7 @@ export const getContent: RequestHandler = async (req, res) => {
 export const deleteContent: RequestHandler = async (req, res) => {
     const contentId = req.body.contentId;
     await ContentModel.deleteMany({
-        contentId,
+        _id: contentId,
         //@ts-ignore
         userId: req.userId as string
     })
@@ -85,43 +96,43 @@ export const shareContent: RequestHandler = async (req, res) => {
             });
         }
 
-    }catch(err){
+    } catch (err) {
         console.log("Error in the share api");
         res.json({
-            message:"error in share api dev phase"
+            message: "error in share api dev phase"
         })
     }
 }
 
 export const shareLink: RequestHandler = async (req, res) => {
-        const hash = req.params.shareLink;
+    const hash = req.params.shareLink;
 
 
-        if (!hash) {
-            throw new Error("User not authenticated");
-        }
-
-
-        //Find the link using provided hash.
-        const link = await LinkModel.findOne({ hash });
-        if (!link) {
-            res.status(404).json({
-                message: "Invalid Shared Link"       // sending error if share link is not valid
-            });
-            return;
-        }
-
-        //Fetch content and user details for the sharable link
-        const content = await ContentModel.find({ userId: link.userId });
-        const user = await UserModel.findOne({ _id: link.userId });
-
-        if (!user) {
-            res.status(404).json({ message: "User Not Found" });
-            return;
-        }
-
-        res.json({
-            username: user.username,
-            content
-        }); // response with user content details
+    if (!hash) {
+        throw new Error("User not authenticated");
     }
+
+
+    //Find the link using provided hash.
+    const link = await LinkModel.findOne({ hash });
+    if (!link) {
+        res.status(404).json({
+            message: "Invalid Shared Link"       // sending error if share link is not valid
+        });
+        return;
+    }
+
+    //Fetch content and user details for the sharable link
+    const content = await ContentModel.find({ userId: link.userId });
+    const user = await UserModel.findOne({ _id: link.userId });
+
+    if (!user) {
+        res.status(404).json({ message: "User Not Found" });
+        return;
+    }
+
+    res.json({
+        username: user.username,
+        content
+    }); // response with user content details
+}

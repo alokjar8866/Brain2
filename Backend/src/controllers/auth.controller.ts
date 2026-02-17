@@ -78,10 +78,11 @@ export const loginUser:RequestHandler = async(req,res)=>{
             id:user._id,
         },JWTPass);
     
-        res.cookie("token",token);
+        //res.cookie("token",token);
     
         res.status(200).json({
             msg:"User Logged in Successfully",
+            token:token,
             user:{
                 _id:user._id,
                 username:user.username,
