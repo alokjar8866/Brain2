@@ -8,6 +8,7 @@ interface ButtonProps{
     startIcon?: ReactElement;
     endIcon?: ReactElement;
     onClick?: ()=>void;
+    onError?: ()=>void;
     fullWidth?:boolean;
     isLoading?:boolean
 }
