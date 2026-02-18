@@ -1,4 +1,5 @@
-import { CrossIcon } from "../icons/CrossIcon";
+import { DeleteIcon } from "../icons/DeleteIcon";
+import { LinkLogo } from "../icons/LinkLogo";
 import { ShareIcon } from "../icons/ShareIcon";
 
 interface CardProps {
@@ -28,13 +29,13 @@ export function Card({ title, link, type, onClick }: CardProps) {
                     {title || "Untitled"}
                 </div>
                 <div className="flex items-center">
-                    <div className="pr-2 text-red-500">
+                    <div className="pr-2 text-red-500 hover:scale-110">
                         <a href={link} target="_blank">
-                            <ShareIcon size="md" />
+                            <LinkLogo size="lg" />
                         </a>
                     </div>
                     <div className="text-red-500 cursor-pointer hover:scale-110 transition-transform" onClick={onClick}>
-                    <CrossIcon />
+                    <DeleteIcon size="lg" />
                 </div>
                 </div>
             </div>
