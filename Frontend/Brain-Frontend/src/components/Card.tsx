@@ -1,22 +1,15 @@
 import { DeleteIcon } from "../icons/DeleteIcon";
 import { LinkLogo } from "../icons/LinkLogo";
 import { ShareIcon } from "../icons/ShareIcon";
+import { getFacebookEmbedUrl, getInstagramEmbedUrl, getLinkedInEmbedUrl, getYoutubeEmbedUrl } from "../utils/LinkModifier";
 
 interface CardProps {
     title: string,
     link: string,
-    type: "twitter" | "youtube",
-    onClick?:() => void;
+    type: "twitter" | "youtube" | "linkedin" | "instagram" | "facebook",
+    onClick?: () => void;
 }
 
-const getYoutubeEmbedUrl = (url: string) => {
-    // This regex captures the ID from youtube.com/watch?v=ID or youtu.be/ID
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-    const match = url.match(regExp);
-    const videoId = (match && match[2].length === 11) ? match[2] : null;
-
-    return videoId ? `https://www.youtube.com/embed/${videoId}` : "";
-};
 
 export function Card({ title, link, type, onClick }: CardProps) {
     return <div>
@@ -35,8 +28,8 @@ export function Card({ title, link, type, onClick }: CardProps) {
                         </a>
                     </div>
                     <div className="text-red-500 cursor-pointer hover:scale-110 transition-transform" onClick={onClick}>
-                    <DeleteIcon size="lg" />
-                </div>
+                        <DeleteIcon size="lg" />
+                    </div>
                 </div>
             </div>
             <div className="pt-4 rounded-xl">
@@ -52,13 +45,39 @@ export function Card({ title, link, type, onClick }: CardProps) {
 
                 {
                     type === "twitter" && (
-                        <div className="max-h-64 overflow-y-auto w-full">
+                        <div className=" overflow-y-auto w-full">
                             <blockquote className="twitter-tweet">
                                 <a href={link.replace("x.com", "twitter.com")}></a>
                             </blockquote>
                         </div>
                     )
                 }
+
+                {type === "instagram" && (
+                    <iframe
+                        className="w-full rounded-md border-none"
+                        src={getInstagramEmbedUrl(link)}
+                        allowTransparency={true}
+                        scrolling="no"
+                    ></iframe>
+                )}
+
+                {type === "linkedin" && (
+                    <iframe
+                        src={getLinkedInEmbedUrl(link)}
+                        className="w-full rounded-md"
+                        title="LinkedIn"
+                    ></iframe>
+                )}
+
+                {type === "facebook" && (
+                    <iframe 
+                        src={getFacebookEmbedUrl(link)} 
+                        className="w-full border-none rounded-md" 
+                        allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                    ></iframe>
+                )}
+                       
             </div>
         </div>
     </div>

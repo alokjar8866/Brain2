@@ -11,7 +11,7 @@ enum ContentType {
     Twitter = "twitter",
     Instagram = "instagram",
     Facebook = "facebook",
-    LinkedIn = "Linkedin"
+    LinkedIn = "linkedin"
 }
 
 //it is a controlled component
