@@ -42,10 +42,10 @@ export function CreateContentModal({ open, onClose }) {
         }
     });
     return <div>
-        {open && <div className="w-screen h-screen bg-slate-800 fixed top-0 left-0 opacity-60 flex justify-center">
+        {open && <div className="w-screen h-screen bg-slate-900 fixed top-0 left-0 opacity-90 flex justify-center">
             <div className="flex flex-col justify-center ">
                 <span className="bg-white opacity-100 p-4 rounded">
-                    <div className="flex justify-end cursor-pointer">
+                    <div className="flex justify-end cursor-pointer mb-2 p-1">
                         <div onClick={onClose}>
                             <CrossIcon />
                         </div>

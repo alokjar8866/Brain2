@@ -8,12 +8,12 @@ import { useMutation } from "@tanstack/react-query";
 
 export function SignIn() {
 
-    const usernameRef = useRef<HTMLInputElement>();
-    const passwordRef = useRef<HTMLInputElement>();
+    const usernameRef = useRef<HTMLInputElement>(null);
+    const passwordRef = useRef<HTMLInputElement>(null);
     const navigate = useNavigate();
 
-        const username = usernameRef.current?.value;
-        const password = passwordRef.current?.value;
+        //const username = usernameRef.current?.value;
+        //const password = passwordRef.current?.value;
 
         // 1. Define the Mutation
         const { mutate, isPending } = useMutation({

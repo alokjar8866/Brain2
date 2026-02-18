@@ -10,6 +10,7 @@ import { BACKEND_URL } from '../config'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
+import { LogOutIcon } from '../icons/Logout'
 
 
 export function Dashboard() {
@@ -63,6 +64,22 @@ export function Dashboard() {
   });
 
 
+  const logoutMutation = useMutation({
+  mutationFn: async () => {
+    localStorage.removeItem("token");
+  },
+  onSuccess: () => {
+    // Clear the cache so the next user doesn't see old data
+    queryClient.clear();
+    
+    // Redirect to login page
+    window.location.href = "/signin"; 
+  },
+  onError: () => {
+    alert("An error occurred during logout.");
+  }
+});
+
 
   return (
     <div>
@@ -89,8 +106,15 @@ export function Dashboard() {
             startIcon={<ShareIcon size='lg' />}
             size="sm"
             variant='secondary'
-
             text={shareMutation.isPending ? 'Sharing...' : 'Share'}
+          />
+
+           <Button
+            onClick={() => logoutMutation.mutate()}
+            startIcon={<LogOutIcon size='md' />}
+            size="sm"
+            variant='danger'
+            text='Logout'
           />
         </div>
 
