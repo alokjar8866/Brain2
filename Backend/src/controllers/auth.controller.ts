@@ -27,7 +27,8 @@ export const registerUser:RequestHandler= async(req,res)=>{
     })
 
     const token = jwt.sign({
-        id:user._id
+        id:user._id,
+        name:user.fullName
     },JWTPass)
 
 
@@ -76,6 +77,7 @@ export const loginUser:RequestHandler = async(req,res)=>{
 
     const token = jwt.sign({
             id:user._id,
+            name:user.fullName
         },JWTPass);
     
         //res.cookie("token",token);

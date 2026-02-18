@@ -43,7 +43,7 @@ export const getContent: RequestHandler = async (req, res) => {
         }
         const content = await ContentModel.find({
             userId: userId
-        }).populate("userId", "username")
+        }).populate("userId", "username fullName")
 
         res.json({
             content
