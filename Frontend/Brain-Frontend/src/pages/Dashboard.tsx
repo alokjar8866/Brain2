@@ -107,10 +107,17 @@ export function Dashboard() {
   }
 
 
+  //for filteration of contents 
+  const [filter, setFilter] = useState<string | null>(null);
+  const filteredContents = filter 
+    ? contents.filter((item: any) => item.type.toLowerCase() === filter.toLowerCase()) 
+    : contents;
+
+
   return (
     <div>
 
-      <Sidebar />
+      <Sidebar selectedType={filter} setSelectedType={setFilter} />
 
       <div className='p-4 ml-72 min-h-screen bg-gray-500'>
 
@@ -166,7 +173,7 @@ export function Dashboard() {
           }
 
           {
-            contents.map((item: any, index: number) => <Card
+            filteredContents.map((item: any, index: number) => <Card
               key={index || item._id}
               type={item.type}
               link={item.link}

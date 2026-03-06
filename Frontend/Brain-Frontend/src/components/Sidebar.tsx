@@ -6,20 +6,36 @@ import { Linkedin } from "../icons/Linkedin";
 import { Instagram } from "../icons/Instagram";
 import Facebook from "../icons/Facebook";
 
-export function Sidebar(){
-    return <div className="pl-6 h-screen bg-white border-r w-72 fixed left-0 top-0">
-       <div className="flex text-2xl pt-4 items-center font-semibold">
-        <div className="pr-2 text-purple-600">
-            <BrainLogo/>
+export function Sidebar({ selectedType, setSelectedType }:any) {
+    const menuItems = [
+        { text: "Twitter", icon: <Twitter />, type: "twitter" },
+        { text: "Youtube", icon: <Youtube />, type: "youtube" },
+        { text: "LinkedIn", icon: <Linkedin />, type: "linkedin" },
+        { text: "Instagram", icon: <Instagram />, type: "instagram" },
+        { text: "Facebook", icon: <Facebook />, type: "facebook" },
+    ];
+
+    return (
+        <div className="pl-6 h-screen bg-gray-400 border-r w-72 fixed left-0 top-0">
+            <div className="flex text-2xl pt-4 items-center font-semibold cursor-pointer" 
+                 onClick={() => setSelectedType(null)}> {/* Reset filter on logo click */}
+                <div className="pr-2 text-purple-600">
+                    <BrainLogo/>
+                </div>
+                Brain2
+            </div>
+            <div className="pt-8 pl-4 font-semibold">
+                {menuItems.map((item) => (
+                    <SideBarItem 
+                        key={item.text}
+                        text={item.text} 
+                        icon={item.icon} 
+                        // Set active style if this is the selected type
+                        active={selectedType === item.type}
+                        onClick={() => setSelectedType(item.type)} 
+                    />
+                ))}
+            </div>
         </div>
-        Brain2
-       </div>
-       <div className="pt-8 pl-4 font-semibold">
-            <SideBarItem text="Twitter" icon={<Twitter/>}/>
-            <SideBarItem text="Youtube" icon={<Youtube/>}/>
-            <SideBarItem text="LinkedIn" icon={<Linkedin/>}/>
-            <SideBarItem text="Instagram" icon={<Instagram/>}/>
-            <SideBarItem text="Facebook" icon={<Facebook/>}/>
-       </div>
-    </div>
+    );
 }
