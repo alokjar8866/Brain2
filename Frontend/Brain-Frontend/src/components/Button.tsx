@@ -13,11 +13,15 @@ interface ButtonProps {
     isLoading?: boolean
 }
 
-const variantStyles = {
-    "primary": "bg-blue-900 rounded-lg border-2 border-white text-white font-semibold hover:bg-blue-700",
-    "secondary": "bg-gray-900 rounded-lg border-2 border-white text-white font-semibold hover:bg-gray-700",
-    "danger": "bg-red-900 rounded-lg border-2 border-white text-white font-semibold hover:bg-red-700"
-}
+
+    const variantStyles: Record<Variants, string> = {
+    primary:
+        "bg-blue-800 hover:bg-blue-700 active:bg-blue-700 text-white border border-blue-400/50 rounded-lg shadow-md shadow-blue-900/40 hover:shadow-blue-800/50 hover:-translate-y-[1px] active:translate-y-0 active:shadow-none",
+    secondary:
+        "bg-zinc-800 hover:bg-zinc-700 active:bg-zinc-900 text-zinc-100 border border-zinc-600/60 rounded-lg shadow-md shadow-black/30 hover:-translate-y-[1px] active:translate-y-0 active:shadow-none",
+    danger:
+        "bg-red-700 hover:bg-red-700 active:bg-red-600 text-white text-bold border border-red-400/50 rounded-lg shadow-md shadow-red-900/40 hover:shadow-red-800/50 hover:-translate-y-[1px] active:translate-y-0 active:shadow-none",
+};
 
 const sizeStyles = {
     "sm": "py-1 px-2",
@@ -47,6 +51,4 @@ export const Button = (props: ButtonProps) => {
 
         {props.endIcon}
     </button>
-}
-
-
+} 
