@@ -1,20 +1,25 @@
 interface InputProps {
-    placeholder:string;
-    ref?:any
-    type?:string
+    placeholder: string;
+    ref?: any;
+    type?: string;
 }
 
-export function Input({placeholder,ref,type}:InputProps) {
-    return <div>
-        <input
-        ref={ref}
-        type={type}
-        placeholder={placeholder}
-        className="w-60 h-10 max-w-md px-4 py-2 bg-zinc-500 border-2 border-black rounded-md 
-                   text-white placeholder-white
-                   focus:outline-none focus:ring-2 focus:ring-blue-700 focus:border-gray-400 
-                   transition-all duration-200 ease-in-out mb-2"
-      />
-    </div>
-        
+export function Input({ placeholder, ref, type }: InputProps) {
+    return (
+        <div className="w-full mb-2">
+            <input
+                ref={ref}
+                type={type}
+                placeholder={placeholder}
+                className="w-full h-10 px-4 py-2 
+                           bg-white/6 
+                           border border-white/10 
+                           rounded-xl 
+                           text-white text-sm
+                           placeholder:text-white/25
+                           focus:outline-none focus:border-indigo-500/60 focus:ring-2 focus:ring-indigo-500/20
+                           transition-all duration-200 ease-in-out"
+            />
+        </div>
+    );
 }
