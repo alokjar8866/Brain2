@@ -36,23 +36,44 @@ export function SignUp() {
         onError: (error: any) => {
             const message = error.response?.data?.msg || "Login failed. Please try again.";
             alert(message);
+            console.log(error.response.data.errors[0].message);
         }
     });
 
 
     return <div className="h-screen w-screen flex flex-col justify-center items-center bg-gray-900">
-        <div className="mb-30 p-4 bg-gray-800 border border-black font-semibold text-white rounded-2xl">
-            <h3 className="text-4xl">Welcome To Brain2 - Your Second Brain</h3>
-        </div>
-        <div className="bg-gray-500 rounded-xl border min-w-48 p-4 bg gap-2 flex-col">
-            <div className="justify-center items-center flex py-1 mb-3 rounded-md bg-blue-400">
-                <label className="text-white font-semibold">SIGN UP</label>
-            </div>
-            <Input type="text" ref={fullnameRef} placeholder="Full Name" />
-            <Input type="text" ref={usernameRef} placeholder="Username" />
-            <Input type="password" ref={passwordRef} placeholder="Password" />
+        <div className="signin-card bg-white dark:bg-black border border-gray-200 dark:border-gray-800 rounded-lg shadow-sm p-10">
+            {/* Header */}
+            <div className="text-center mb-6">
 
-            <div className="flex justify-center pt-4">
+                <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                    CREATE ACCOUNT
+                </h1>
+            </div>
+
+            <div className="space-y-4">
+                {/* full name input */}
+                <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-900 dark:text-gray-100">Full Name</label>
+                    <Input ref={usernameRef} type="text" placeholder="Full Name" />
+                </div>
+                {/* Email Input */}
+                <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-900 dark:text-gray-100">Username</label>
+                    <Input ref={usernameRef} type="text" placeholder="Username" />
+                </div>
+
+                {/* Password Input */}
+                <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-900 dark:text-gray-100">Password</label>
+                    <div className="relative">
+                        <Input ref={passwordRef} type="password" placeholder="Password" />
+                    </div>
+                </div>
+
+
+                {/* Submit Button */}
+                <div className="flex justify-center pt-4">
                 <Button
                     onClick={() => mutate()}
                     variant="primary"
@@ -60,7 +81,14 @@ export function SignUp() {
                     text={isPending ? "Creating..." : "Create Account"}
                     fullWidth={true} />
             </div>
-
+            </div>
+            {/* Footer */}
+            <div className="mt-6 text-center">
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Already have an account ? Please{' '}
+                    <a href="./signin" className="text-gray-900 dark:text-gray-100 font-medium hover:underline">Sign in</a>
+                </p>
+            </div>
         </div>
     </div>
 }
