@@ -6,6 +6,8 @@ import connectDB from './dbConnect/db.js';
 import { userAuthMiddle } from './middlewares/authMiddle.js';
 import { createContent, deleteContent, getContent, shareContent, shareLink } from './controllers/content.controller.js';
 import cors from "cors";
+import { validate } from './middlewares/validate.js';
+import { loginSchema, registerSchema } from './schemas/auth.schema.js';
 const app:express.Application = express();
 
 app.use(cookieParser());
@@ -19,8 +21,8 @@ app.get('/',function (req,res){
         "msg":"hello server started"
     })
 })
-app.post('/api/v1/signup',registerUser);
-app.post('/api/v1/signin',loginUser);
+app.post('/api/v1/signup',validate(registerSchema),registerUser);
+app.post('/api/v1/signin',validate(loginSchema),loginUser);
 app.post('/api/v1/logout',logoutUser);
 
 app.post('/api/v1/content', userAuthMiddle, createContent);
