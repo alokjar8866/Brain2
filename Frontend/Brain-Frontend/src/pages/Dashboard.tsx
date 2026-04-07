@@ -109,8 +109,8 @@ export function Dashboard() {
 
   //for filteration of contents 
   const [filter, setFilter] = useState<string | null>(null);
-  const filteredContents = filter 
-    ? contents.filter((item: any) => item.type.toLowerCase() === filter.toLowerCase()) 
+  const filteredContents = filter
+    ? contents.filter((item: any) => item.type.toLowerCase() === filter.toLowerCase())
     : contents;
 
 
