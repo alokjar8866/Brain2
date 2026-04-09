@@ -5,6 +5,7 @@ import axios from "axios";
 import { BACKEND_URL } from "../config";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
+import { BrainLogo } from "../icons/BrainLogo";
 
 
 export function SignUp() {
@@ -41,54 +42,77 @@ export function SignUp() {
     });
 
 
-    return <div className="h-screen w-screen flex flex-col justify-center items-center bg-gray-900">
-        <div className="signin-card bg-white dark:bg-black border border-gray-200 dark:border-gray-800 rounded-lg shadow-sm p-10">
-            {/* Header */}
-            <div className="text-center mb-6">
+    return <div className="h-screen w-screen flex flex-col justify-center items-center bg-[#07070b] relative overflow-hidden">
 
-                <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
-                    CREATE ACCOUNT
-                </h1>
-            </div>
+        {/* Background glow effects */}
+        <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-125 h-125 bg-[#3088fc]/10 rounded-full blur-[120px]" />
+            <div className="absolute bottom-1/4 left-1/4 w-75 h-75 bg-[#3088fc]/5 rounded-full blur-[100px]" />
+        </div>
 
-            <div className="space-y-4">
-                {/* full name input */}
-                <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-900 dark:text-gray-100">Full Name</label>
-                    <Input ref={usernameRef} type="text" placeholder="Full Name" />
+        <div className="relative w-full max-w-sm mx-auto px-4">
+            {/* Card */}
+            <div className="bg-[#0e0e14] border border-white/[0.07] rounded-2xl shadow-2xl shadow-black/60 p-8">
+
+                {/* Header */}
+                <div className="flex flex-col items-center mb-8">
+
+                    {/* Logo mark */}
+                    <div className="flex items-center justify-center gap-2.5 mb-6">
+                        <div className="w-9 h-9 rounded-xl bg-[#3088fc] flex items-center justify-center shadow-lg shadow-[#3088fc]/30">
+                            <BrainLogo className="w-5 h-5 text-white" />
+                        </div>
+                        <span className="font-syne font-extrabold text-xl text-white tracking-tight">Brain2</span>
+                    </div>
+
+                    {/* Title */}
+                    <h1 className="text-2xl font-syne font-bold text-white tracking-tight">Create Your Account</h1>
+                    <p className="text-sm text-white/40 mt-1">Sign up to your account</p>
                 </div>
-                {/* Email Input */}
-                <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-900 dark:text-gray-100">Username</label>
-                    <Input ref={usernameRef} type="text" placeholder="Username" />
-                </div>
 
-                {/* Password Input */}
-                <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-900 dark:text-gray-100">Password</label>
-                    <div className="relative">
-                        <Input ref={passwordRef} type="password" placeholder="Password" />
+                <div className="space-y-4">
+                    {/* Fullname */}
+                    <div className="space-y-1.5">
+                        <label className="text-xs font-semibold uppercase tracking-widest text-white/40">Name</label>
+                        <Input ref={usernameRef} type="text" placeholder="Enter Name " />
+                    </div>
+
+                    {/* Username */}
+                    <div className="space-y-1.5">
+                        <label className="text-xs font-semibold uppercase tracking-widest text-white/40">Username</label>
+                        <Input ref={usernameRef} type="text" placeholder="Enter Username" />
+                    </div>
+
+                    {/* Password */}
+                    <div className="space-y-1.5">
+                        <label className="text-xs font-semibold uppercase tracking-widest text-white/40">Password</label>
+                        <Input ref={passwordRef} type="password" placeholder="Enter Password" />
+                    </div>
+
+                    {/* Submit */}
+                    <div className="pt-2">
+                        <Button
+                            onClick={() => mutate()}
+                            variant="primary"
+                            size="sm"
+                            text={isPending ? "Creating..." : "Create Account"}
+                            fullWidth={true} />
                     </div>
                 </div>
 
-
-                {/* Submit Button */}
-                <div className="flex justify-center pt-4">
-                <Button
-                    onClick={() => mutate()}
-                    variant="primary"
-                    size="sm"
-                    text={isPending ? "Creating..." : "Create Account"}
-                    fullWidth={true} />
-            </div>
-            </div>
-            {/* Footer */}
-            <div className="mt-6 text-center">
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Already have an account ? Please{' '}
-                    <a href="./signin" className="text-gray-900 dark:text-gray-100 font-medium hover:underline">Sign in</a>
+                {/* Footer */}
+                <p className="mt-6 text-center text-xs text-white/30">
+                     Already have an account ? Please{' '}
+                    <a href="./signin" className="text-[#3088fc] hover:text-[#4a98ff] font-medium transition-colors">
+                       Sign in
+                    </a>
                 </p>
             </div>
+
+            {/* Bottom hint */}
+            <p className="text-center text-xs text-white/15 mt-4">
+                Secured by Brain2 · End-to-end encrypted
+            </p>
         </div>
     </div>
 }
