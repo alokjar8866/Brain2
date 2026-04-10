@@ -1,4 +1,4 @@
-import { type IconProps, iconSizeVariants } from "./ind"
+import { type IconProps, iconSizeVariants } from "./iconSizeInterface"
 
 
 export const ShareIcon = (props:IconProps) => {
