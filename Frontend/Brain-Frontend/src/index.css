@@ -1,1 +1,38 @@
 @import "tailwindcss";
+
+
+@theme {
+  --animate-floatUp: floatUp 0.8s ease forwards;
+  --animate-floatUp-d1: floatUp 0.8s 0.1s ease forwards;
+  --animate-floatUp-d2: floatUp 0.8s 0.2s ease forwards;
+}
+
+
+@keyframes floatUp {
+  0% { opacity: 0; transform: translateY(40px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.cursor-blink {
+  animation: blink 0.7s step-end infinite;
+}
+
+@theme {
+  --animate-marquee-left: marquee-left 25s linear infinite;
+  --animate-marquee-right: marquee-right 25s linear infinite;
+}
+
+@keyframes marquee-left {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes marquee-right {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0%); }
+}
