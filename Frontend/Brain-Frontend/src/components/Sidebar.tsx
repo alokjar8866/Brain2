@@ -17,7 +17,7 @@ export function Sidebar({ selectedType, setSelectedType }:any) {
 
     return (
         <div className="pl-6 h-screen bg-zinc-600 border-r w-72 fixed left-0 top-0">
-            <div className="flex text-2xl font-semibold pt-4 items-center justify-baseline font-semibold cursor-pointer" 
+            <div className="flex text-2xl pt-4 items-center justify-baseline font-semibold cursor-pointer" 
                  onClick={() => setSelectedType(null)}> {/* Reset filter on logo click */}
                 <div className="pr-2 text-purple-600">
                     <BrainLogo/>
