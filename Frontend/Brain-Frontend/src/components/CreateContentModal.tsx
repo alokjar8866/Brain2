@@ -1,10 +1,14 @@
 import { useRef, useState } from "react";
 import { CrossIcon } from "../icons/CrossIcon";
-import { Button } from "./Button";
 import { Input } from "./Input";
 import axios from "axios";
 import { BACKEND_URL } from "../config";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Youtube } from "../icons/Youtube";
+import { Instagram } from "../icons/Instagram";
+import Facebook from "../icons/Facebook";
+import { Linkedin } from "../icons/Linkedin";
+import Xnew from "../icons/Xnew";
 
 enum ContentType {
     Youtube = "youtube",
@@ -14,9 +18,15 @@ enum ContentType {
     LinkedIn = "linkedin"
 }
 
-//it is a controlled component
-export function CreateContentModal({ open, onClose }) {
+const typeConfig = {
+    youtube:   { emoji: <Youtube/>, label: "YouTube" },
+    twitter:   { emoji: <Xnew/>, label: "Twitter" },
+    instagram: { emoji: <Instagram/>, label: "Instagram" },
+    facebook:  { emoji: <Facebook/>, label: "Facebook" },
+    linkedin:  { emoji: <Linkedin/>, label: "LinkedIn" },
+};
 
+export function CreateContentModal({ open, onClose }) {
     const queryClient = useQueryClient();
     const titleRef = useRef<HTMLInputElement>(null);
     const linkRef = useRef<HTMLInputElement>(null);
@@ -24,75 +34,139 @@ export function CreateContentModal({ open, onClose }) {
 
     const { mutate, isPending } = useMutation({
         mutationFn: async () => {
-            const response = await axios.post(`${BACKEND_URL}/api/v1/content`, {
-                link: linkRef.current?.value,
-                title: titleRef.current?.value,
-                type
-            },
+            const response = await axios.post(`${BACKEND_URL}/api/v1/content`,
                 {
-                    headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` }
-                });
+                    link: linkRef.current?.value,
+                    title: titleRef.current?.value,
+                    type
+                },
+                { headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` } }
+            );
             return response.data;
         },
-
         onSuccess: () => {
-            // This replaces your useEffect/refresh logic!
-            queryClient.invalidateQueries({ queryKey: ['contents'] });
+            queryClient.invalidateQueries({ queryKey: ["contents"] });
             onClose();
         },
         onError: () => {
             alert("Failed to add content");
         }
     });
-    return <div>
-        {open && <div className="w-screen h-screen bg-slate-900 fixed top-0 left-0 opacity-90 flex justify-center">
-            <div className="flex flex-col justify-center ">
-                <span className="bg-slate-300 opacity-100 p-4 rounded">
-                    <div className="flex justify-end cursor-pointer mb-2 p-1">
 
-                        <div onClick={onClose}>
-                            <CrossIcon />
+    if (!open) return null;
+
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+
+            {/* Backdrop */}
+            <div
+                className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+                onClick={onClose}
+            />
+
+            {/* Modal */}
+            <div className="relative bg-[#0e0e14] border border-white/[0.07] rounded-2xl shadow-2xl shadow-black/60 w-full max-w-md mx-4 overflow-hidden">
+
+                {/* Top glow */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-24 bg-[#3088fc]/10 rounded-full blur-[60px] pointer-events-none" />
+
+                <div className="relative p-8">
+
+                    {/* Header */}
+                    <div className="flex items-center justify-between mb-8">
+                        <div>
+                            <h2 className="font-sans font-bold text-xl text-white tracking-tight">
+                                Add to Brain2
+                            </h2>
+                            <p className="text-xs text-white/30 mt-0.5">
+                                Save a new piece of content
+                            </p>
                         </div>
-                    </div>
-                    <div>
-                        <Input ref={titleRef} placeholder={"Title"} />
-                        <Input ref={linkRef} placeholder={"Link"} />
+                        <button
+                            onClick={onClose}
+                            className="w-8 h-8 rounded-lg bg-white/4 border border-white/[0.07] flex items-center justify-center text-white/30 hover:text-white hover:border-white/20 transition-all duration-200"
+                        >
+                            <CrossIcon />
+                        </button>
                     </div>
 
-                    <div className="mt-4">
-                        <h1 className="font-bold mb-2">Select Type</h1>
-                        <div className="relative">
-                            <select
-                                value={type}
-                                onChange={(e) => setType(e.target.value as ContentType)}
-                                className="w-full p-1 px-2 bg-white border-2 border-black rounded-md text-black outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none cursor-pointer transition-all"
-                            >
+                    <div className="space-y-5">
+
+                        {/* Title input */}
+                        <div className="space-y-1.5">
+                            <label className="text-xs font-semibold uppercase tracking-widest text-white/30">
+                                Title
+                            </label>
+                            <Input
+                                ref={titleRef}
+                                placeholder="Give it a name..."
+                                //className="w-full bg-white/4 border border-white/8 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-white/20 focus:border-[#3088fc]/50 focus:ring-1 focus:ring-[#3088fc]/20 outline-none transition-all"
+                            />
+                        </div>
+
+                        {/* Link input */}
+                        <div className="space-y-1.5">
+                            <label className="text-xs font-semibold uppercase tracking-widest text-white/30">
+                                Link
+                            </label>
+                            <Input
+                                ref={linkRef}
+                                placeholder="Paste your URL here..."
+                                //className="w-full bg-white/4 border border-white/8 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-white/20 focus:border-[#3088fc]/50 focus:ring-1 focus:ring-[#3088fc]/20 outline-none transition-all"
+                            />
+                        </div>
+
+                        {/* Type selector */}
+                        <div className="space-y-2">
+                            <label className="text-xs font-semibold uppercase tracking-widest text-white/30">
+                                Content Type
+                            </label>
+                            <div className="grid grid-cols-5 gap-2">
                                 {Object.values(ContentType).map((option) => (
-                                    <option key={option} value={option}>
-                                        {option.charAt(0).toUpperCase() + option.slice(1)}
-                                    </option>
+                                    <button
+                                        key={option}
+                                        onClick={() => setType(option)}
+                                        className={`flex flex-col items-center gap-1.5 py-3 rounded-xl border text-center transition-all duration-200 
+                                            ${type === option
+                                                ? "bg-[#3088fc]/15 border-[#3088fc]/50 shadow-lg shadow-[#3088fc]/10"
+                                                : "bg-gray-600 border-white/[0.07] hover:border-white/20 hover:bg-white/6"
+                                            }`}
+                                    >
+                                        <span className="text-lg">{typeConfig[option].emoji}</span>
+                                        <span className={`text-[10px] font-semibold tracking-wide ${type === option ? "text-[#3088fc]" : "text-white/30"}`}>
+                                            {typeConfig[option].label}
+                                        </span>
+                                    </button>
                                 ))}
-                            </select>
-                            <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none text-slate-400">
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                                </svg>
                             </div>
                         </div>
-                    </div>
-                    <div className="flex justify-center mt-2">
-                        <Button
-                            size="md"
-                            onClick={() => mutate()} variant="primary"
-                            text={isPending ? "Submitting..." : "Submit"}
-                        />
-                    </div>
 
-                </span>
+                        {/* Divider */}
+                        <div className="w-full h-px bg-linear-to-r from-transparent via-white/6 to-transparent" />
 
+                        {/* Submit */}
+                        <button
+                            onClick={() => mutate()}
+                            disabled={isPending}
+                            className="w-full bg-[#1549e6] hover:bg-[#257cec] disabled:opacity-50 disabled:cursor-not-allowed text-white font-sans font-bold text-sm py-3 rounded-xl transition-all duration-200 active:scale-95 flex items-center justify-center gap-2"
+                        >
+                            {isPending ? (
+                                <>
+                                    <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none">
+                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+                                    </svg>
+                                    Saving...
+                                </>
+                            ) : (
+                                <>Save to Brain2</>
+                            )}
+                        </button>
+
+                    </div>
+                </div>
             </div>
-        </div>}
-    </div>
+        </div>
+    );
 }
-
 
