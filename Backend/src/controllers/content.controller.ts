@@ -3,20 +3,32 @@ import { ContentModel } from "../models/content.model.js"
 import { LinkModel } from "../models/link.model.js";
 import { randomStr } from "../utils/randomStr.js"
 import { UserModel } from "../models/user.model.js";
+import { TagModel } from "../models/tag.model.js";
 
 //add the type of link which is used in schema.....DIL
 export const createContent: RequestHandler = async (req, res) => {
 
     try {
-        const { title, link } = req.body;
+        const { title, link, tags = [] } = req.body;
         /** const authorId = (req as any).user._id;  //_id **/
+
+        const tagIds = await Promise.all(
+            tags.map(async (name: string) => {
+                const tag = await TagModel.findOneAndUpdate(
+                    { name: name.toLowerCase().trim(), userId: req.userId },
+                    { name: name.toLowerCase().trim(), userId: req.userId },
+                    { upsert: true, new: true }
+                );
+                return tag._id;
+            })
+        );
 
         const newContent = await ContentModel.create({
             title,
             link,
             type: req.body.type,
             userId: req.userId,
-            tags: []
+            tags: tagIds
         })
 
         res.status(201).json({
@@ -43,7 +55,7 @@ export const getContent: RequestHandler = async (req, res) => {
         }
         const content = await ContentModel.find({
             userId: userId
-        }).populate("userId", "username fullName")
+        }).populate("userId", "username fullName")..populate("tags", "name");
 
         res.json({
             content
