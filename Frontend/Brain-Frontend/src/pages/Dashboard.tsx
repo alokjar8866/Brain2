@@ -178,6 +178,7 @@ export function Dashboard() {
               type={item.type}
               link={item.link}
               title={item.title}
+              tags={item.tags}
               onClick={() => {
                 if (window.confirm("Are you sure???")) {
                   deleteMutation.mutate(item._id)
