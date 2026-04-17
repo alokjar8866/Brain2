@@ -19,11 +19,11 @@ enum ContentType {
 }
 
 const typeConfig = {
-    youtube:   { emoji: <Youtube/>, label: "YouTube" },
-    twitter:   { emoji: <Xnew/>, label: "Twitter" },
-    instagram: { emoji: <Instagram/>, label: "Instagram" },
-    facebook:  { emoji: <Facebook/>, label: "Facebook" },
-    linkedin:  { emoji: <Linkedin/>, label: "LinkedIn" },
+    youtube: { emoji: <Youtube />, label: "YouTube" },
+    twitter: { emoji: <Xnew />, label: "Twitter" },
+    instagram: { emoji: <Instagram />, label: "Instagram" },
+    facebook: { emoji: <Facebook />, label: "Facebook" },
+    linkedin: { emoji: <Linkedin />, label: "LinkedIn" },
 };
 
 export function CreateContentModal({ open, onClose }) {
@@ -32,13 +32,28 @@ export function CreateContentModal({ open, onClose }) {
     const linkRef = useRef<HTMLInputElement>(null);
     const [type, setType] = useState(ContentType.Youtube);
 
+    const [tags, setTags] = useState<string[]>([]);
+    const [tagInput, setTagInput] = useState("");
+
+    const addTag = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === "Enter" || e.key === ",") {
+            e.preventDefault();
+            const val = tagInput.trim().toLowerCase();
+            if (val && !tags.includes(val)) setTags([...tags, val]);
+            setTagInput("");
+        }
+    };
+
+    const removeTag = (tag: string) => setTags(tags.filter(t => t !== tag));
+
     const { mutate, isPending } = useMutation({
         mutationFn: async () => {
             const response = await axios.post(`${BACKEND_URL}/api/v1/content`,
                 {
                     link: linkRef.current?.value,
                     title: titleRef.current?.value,
-                    type
+                    type,
+                    tags
                 },
                 { headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` } }
             );
@@ -46,6 +61,8 @@ export function CreateContentModal({ open, onClose }) {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["contents"] });
+            setTags([]);
+            setTagInput("");
             onClose();
         },
         onError: () => {
@@ -100,7 +117,7 @@ export function CreateContentModal({ open, onClose }) {
                             <Input
                                 ref={titleRef}
                                 placeholder="Give it a name..."
-                                //className="w-full bg-white/4 border border-white/8 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-white/20 focus:border-[#3088fc]/50 focus:ring-1 focus:ring-[#3088fc]/20 outline-none transition-all"
+                            //className="w-full bg-white/4 border border-white/8 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-white/20 focus:border-[#3088fc]/50 focus:ring-1 focus:ring-[#3088fc]/20 outline-none transition-all"
                             />
                         </div>
 
@@ -112,8 +129,40 @@ export function CreateContentModal({ open, onClose }) {
                             <Input
                                 ref={linkRef}
                                 placeholder="Paste your URL here..."
-                                //className="w-full bg-white/4 border border-white/8 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-white/20 focus:border-[#3088fc]/50 focus:ring-1 focus:ring-[#3088fc]/20 outline-none transition-all"
+                            //className="w-full bg-white/4 border border-white/8 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-white/20 focus:border-[#3088fc]/50 focus:ring-1 focus:ring-[#3088fc]/20 outline-none transition-all"
                             />
+                        </div>
+
+                        {/* Tags addding and management */}
+                        <div className="space-y-1.5">
+                            <label className="text-xs font-semibold uppercase tracking-widest text-white/30">Tags</label>
+                            <div className="flex flex-wrap gap-1.5 bg-white/4 border border-white/8 rounded-xl px-3 py-2.5 focus-within:border-[#3088fc]/50 transition-all min-h-11">
+                                {tags.map(tag => (
+                                    <span key={tag} className="flex items-center gap-1 text-xs bg-[#3088fc]/15 text-[#3088fc] border border-[#3088fc]/20 rounded-full px-2.5 py-1">
+                                        #{tag}
+                                        <button
+                                            onClick={() => removeTag(tag)}
+                                            className="text-[#3088fc]/50 hover:text-[#3088fc] leading-none"
+                                        >
+                                            x
+                                        </button>
+                                    </span>
+                                ))}
+                                <input
+                                    value={tagInput}
+                                    onChange={e => setTagInput(e.target.value)}
+                                    onKeyDown={addTag}
+                                    placeholder={tags.length ? "" : "Add tags..."}
+                                    className="bg-transparent text-sm text-white outline-none placeholder:text-white/20 flex-1 min-w-25"
+                                />
+                            </div>
+                            <p className="text-[11px] text-white/20">
+                                Press{" "}
+                                <kbd className="bg-white/6 px-1.5 py-0.5 rounded text-white/30">Enter</kbd>
+                                {" "}or{" "}
+                                <kbd className="bg-white/6 px-1.5 py-0.5 rounded text-white/30">,</kbd>
+                                {" "}to add a tag
+                            </p>
                         </div>
 
                         {/* Type selector */}
