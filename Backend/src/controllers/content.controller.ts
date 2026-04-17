@@ -55,7 +55,7 @@ export const getContent: RequestHandler = async (req, res) => {
         }
         const content = await ContentModel.find({
             userId: userId
-        }).populate("userId", "username fullName")..populate("tags", "name");
+        }).populate("userId", "username fullName").populate("tags", "name");
 
         res.json({
             content
@@ -148,3 +148,13 @@ export const shareLink: RequestHandler = async (req, res) => {
         content
     }); // response with user content details
 }
+
+
+export const getTags: RequestHandler = async (req, res) => {
+    try {
+        const tags = await TagModel.find({ userId: req.userId }).select("name");
+        res.json({ tags });
+    } catch {
+        res.status(500).json({ message: "Failed to fetch tags" });
+    }
+};
