@@ -16,7 +16,7 @@ interface CardProps {
 export function Card({ title, link, type, onClick, tags }: CardProps) {
     
     return <div>
-        <div className="p-4 bg-amber-200 rounded-md shadow-md outline-slate-300 max-w-72 min-h-48 min-w-72 border-2 border-gray-700">
+        <div className="p-4 bg-amber-200 rounded-md shadow-md border-2 border-gray-700 w-full min-h-48">
             <div className="flex justify-between">
                 <div className="flex items-center text-md font-medium">
                     <div className="text-red-500 pr-2">

@@ -165,7 +165,7 @@ export function Dashboard() {
           </div>
         </div>
 
-        <div className='flex gap-5 flex-wrap'>
+        <div className='grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-5'>
           {isLoading && <p className="text-white">Loading your brain...</p>}
 
           {
