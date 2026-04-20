@@ -74,7 +74,7 @@ export function SignUp() {
                     {/* Fullname */}
                     <div className="space-y-1.5">
                         <label className="text-xs font-semibold uppercase tracking-widest text-white/40">Name</label>
-                        <Input ref={usernameRef} type="text" placeholder="Enter Name " />
+                        <Input ref={fullnameRef} type="text" placeholder="Enter Name " />
                     </div>
 
                     {/* Username */}
