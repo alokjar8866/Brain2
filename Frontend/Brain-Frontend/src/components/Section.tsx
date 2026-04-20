@@ -1,5 +1,5 @@
 import { useTypewriter } from "../hooks/useTypewriter";
-
+import { Link } from "react-router-dom";
 
 function Section() {
   const typedText = useTypewriter();
@@ -26,17 +26,21 @@ function Section() {
           <span className="font-normal text-white text-xl">Brain2 is your personal library for the internet. Capture articles, videos, links, and posts — then share or revisit them anytime</span>
         </div>
         <div className="px-6 py-5 flex flex-row gap-4">
-          <button className="bg-blue-700 text-white font-bold w-12vw py-2 px-4 rounded-xl hover:bg-blue-800 hover:border-white hover:border-2">
+          <Link 
+          to="/signin"
+          className="bg-blue-700 text-white font-bold w-12vw py-2 px-4 rounded-xl hover:bg-blue-800 hover:border-white hover:border-2">
             Login
-          </button>
-          <button className="bg-white border-2 border-amber-100 text-black font-bold py-2 px-4 rounded-xl hover:text-white hover:bg-blue-800">
+          </Link>
+          <Link
+          to="/signup"
+           className="bg-white border-2 border-amber-100 text-black font-bold py-2 px-4 rounded-xl hover:text-white hover:bg-blue-800">
             Sign Up
-          </button>
+          </Link>
         </div>
       </div>
     </div>
     <div className="w-full md:basis-[45%] bg-zinc-900 text-white">
-      video
+      video demo.
     </div>
   </div>
 }
