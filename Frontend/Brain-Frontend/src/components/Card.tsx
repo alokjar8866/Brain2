@@ -1,105 +1,116 @@
 import { DeleteIcon } from "../icons/DeleteIcon";
 import { LinkLogo } from "../icons/LinkLogo";
-import { ShareIcon } from "../icons/ShareIcon";
 import { getFacebookEmbedUrl, getInstagramEmbedUrl, getLinkedInEmbedUrl, getYoutubeEmbedUrl } from "../utils/LinkModifier";
 
 interface CardProps {
-    title: string,
-    link: string,
-    type: "twitter" | "youtube" | "linkedin" | "instagram" | "facebook",
+    title: string;
+    link: string;
+    type: "twitter" | "youtube" | "linkedin" | "instagram" | "facebook";
     onClick?: () => void;
     tags?: { _id: string; name: string }[];
+    date?: string;
 }
 
+export function Card({ title, link, type, onClick, tags, date }: CardProps) {
+    const displayDate = date || new Date().toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+    });
 
+    return (
+        // Smaller max-width for dashboard density
+        <div className="max-w-[320px] w-full h-full group">
+            <div className="flex flex-col h-full p-3 bg-zinc-800 rounded-xl shadow-lg border border-zinc-700/50 hover:border-zinc-500 transition-all duration-300">
 
-export function Card({ title, link, type, onClick, tags }: CardProps) {
-    
-    return <div>
-        <div className="p-4 bg-amber-200 rounded-md shadow-md border-2 border-gray-700 w-full min-h-48">
-            <div className="flex justify-between">
-                <div className="flex items-center text-md font-medium">
-                    <div className="text-red-500 pr-2">
-                        <ShareIcon size="md" />
+                {/* Header Section */}
+                <div className="flex justify-between items-center mb-3 gap-3">
+                    <div className="flex-1 min-w-0">
+                        <h3 className="text-md font-semibold text-zinc-100 truncate" title={title}>
+                            {title || "Untitled Note"}
+                        </h3>
                     </div>
-                    {title || "Untitled"}
-                </div>
-                <div className="flex items-center">
-                    <div className="pr-2 text-red-500 hover:scale-110">
-                        <a href={link} target="_blank">
+                    <div className="flex items-center gap-1 shrink-0">
+                        <a
+                            href={link}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="text-zinc-500 hover:text-blue-400 transition-colors p-1"
+                        >
                             <LinkLogo size="lg" />
                         </a>
+                        <button
+                            onClick={onClick}
+                            className="text-zinc-500 hover:text-red-400 transition-colors p-1"
+                        >
+                            <DeleteIcon size="lg" />
+                        </button>
                     </div>
-                    <div className="text-red-500 cursor-pointer hover:scale-110 transition-transform" onClick={onClick}>
-                        <DeleteIcon size="lg" />
+                </div>
+                {/* Content / Embed Section */}
+                <div className="grow overflow-hidden rounded-lg bg-zinc-900/50 border border-zinc-700/30 mb-2 min-h-40">
+                    {type === "youtube" && (
+                        <iframe
+                            className="w-full aspect-video"
+                            src={getYoutubeEmbedUrl(link)}
+                            title="YouTube video player"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                        ></iframe>
+                    )}
+
+                    {type === "twitter" && (
+                        <div className="w-full max-h-60 overflow-y-auto scrollbar-hide px-1">
+                            <blockquote className="twitter-tweet" data-theme="dark">
+                                <a href={link.replace("x.com", "twitter.com")}></a>
+                            </blockquote>
+                        </div>
+                    )}
+
+                    {(type === "instagram" || type === "linkedin" || type === "facebook") && (
+                        <iframe
+                            className="w-full min-h-50 border-none"
+                            src={type === "instagram" ? getInstagramEmbedUrl(link) :
+                                type === "linkedin" ? getLinkedInEmbedUrl(link) :
+                                    getFacebookEmbedUrl(link)}
+                            allowTransparency={true}
+                        ></iframe>
+                    )}
+                </div>
+
+                {/* Footer Section */}
+                <div className="mt-auto">
+                    {tags && tags.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5 mb-3">
+                            {tags.map((tag) => (
+                                <span
+                                    key={tag._id}
+                                    className="text-[10px] font-medium px-2 py-0.5 bg-gray-500 text-white rounded border border-zinc-600/50 lowercase"
+                                >
+                                    #{tag.name}
+                                </span>
+                            ))}
+                        </div>
+                    )}
+
+                    <div className="flex items-center gap-4 border-t border-zinc-700/50 pt-2.5 mt-2">
+
+                        
+                        <div className="flex items-center gap-1.5">
+                            <span className="text-[10px] text-zinc-100 font-medium whitespace-nowrap">
+                                {displayDate}
+                            </span>
+                        </div>
+
+                        <div className="flex items-center bg-zinc-700/30 px-2 py-0.5 rounded border border-zinc-700/50">
+                            <span className="text-[10px] font-bold text-zinc-100 uppercase tracking-widest">
+                                {type}
+                            </span>
+                        </div>
+
                     </div>
                 </div>
             </div>
-            <div className="pt-4 rounded-xl">
-                {type === "youtube" && (
-                    <iframe
-                        className="w-full rounded-md aspect-video"
-                        src={getYoutubeEmbedUrl(link)}
-                        title="YouTube video player"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        allowFullScreen
-                    ></iframe>
-                )}
-
-                {type === "twitter" && (
-                    <div className="w-full max-w-full overflow-hidden">
-                        <blockquote
-                            className="twitter-tweet"
-                            data-width="260"
-                            data-theme="light"
-                        >
-                            <a href={link.replace("x.com", "twitter.com")}></a>
-                        </blockquote>
-                    </div>
-                )}
-
-                {type === "instagram" && (
-                    <iframe
-                        className="w-full rounded-md border-none"
-                        src={getInstagramEmbedUrl(link)}
-                        allowTransparency={true}
-                        scrolling="no"
-                    ></iframe>
-                )}
-
-                {type === "linkedin" && (
-                    <iframe
-                        src={getLinkedInEmbedUrl(link)}
-                        className="w-full rounded-md"
-                        title="LinkedIn"
-                    ></iframe>
-                )}
-
-                {type === "facebook" && (
-                    <iframe
-                        src={getFacebookEmbedUrl(link)}
-                        className="w-full border-none rounded-md"
-                        allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-                    ></iframe>
-                )}
-            </div>
-
-
-            {/* Tags — add right here, after the embed block */}
-            {tags && tags.length > 0 && (
-                <div className="flex flex-wrap gap-1.5 mt-3">
-                    {tags.map((tag) => (
-                        <span
-                            key={tag._id}
-                            className="text-[11px] text-[#1a5fd4] bg-[#3088fc]/20 border border-[#3088fc]/40 rounded-full px-2.5 py-0.5 tracking-wide font-medium"
-                        >
-                            #{tag.name}
-                        </span>
-                    ))}
-                </div>
-            )}
-
-
         </div>
-    </div>
+    );
 }
