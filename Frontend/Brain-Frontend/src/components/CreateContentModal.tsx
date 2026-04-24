@@ -19,21 +19,41 @@ enum ContentType {
 }
 
 const typeConfig = {
-    youtube: { emoji: <Youtube />, label: "YouTube" },
-    twitter: { emoji: <Xnew />, label: "Twitter" },
-    instagram: { emoji: <Instagram />, label: "Instagram" },
-    facebook: { emoji: <Facebook />, label: "Facebook" },
-    linkedin: { emoji: <Linkedin />, label: "LinkedIn" },
+    youtube: { icon: <Youtube />, label: "YouTube", color: "#FF0000" },
+    twitter: { icon: <Xnew />, label: "Twitter", color: "#1DA1F2" },
+    instagram: { icon: <Instagram />, label: "Instagram", color: "#E1306C" },
+    facebook: { icon: <Facebook />, label: "Facebook", color: "#1877F2" },
+    linkedin: { icon: <Linkedin />, label: "LinkedIn", color: "#0A66C2" },
 };
+
+function detectPlatform(url: string): ContentType | null {
+    try {
+        const { hostname } = new URL(url);
+        const host = hostname.replace("www.", "");
+        if (host.includes("youtube.com") || host.includes("youtu.be")) return ContentType.Youtube;
+        if (host.includes("twitter.com") || host.includes("x.com")) return ContentType.Twitter;
+        if (host.includes("instagram.com")) return ContentType.Instagram;
+        if (host.includes("facebook.com") || host.includes("fb.com")) return ContentType.Facebook;
+        if (host.includes("linkedin.com")) return ContentType.LinkedIn;
+    } catch { }
+    return null;
+}
 
 export function CreateContentModal({ open, onClose }) {
     const queryClient = useQueryClient();
     const titleRef = useRef<HTMLInputElement>(null);
-    const linkRef = useRef<HTMLInputElement>(null);
-    const [type, setType] = useState(ContentType.Youtube);
+
+    const [link, setLink] = useState("");
+    const [detectedType, setDetectedType] = useState<ContentType | null>(null);
 
     const [tags, setTags] = useState<string[]>([]);
     const [tagInput, setTagInput] = useState("");
+
+    const handleLinkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const val = e.target.value;
+        setLink(val);
+        setDetectedType(detectPlatform(val));
+    };
 
     const addTag = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter" || e.key === ",") {
@@ -48,11 +68,12 @@ export function CreateContentModal({ open, onClose }) {
 
     const { mutate, isPending } = useMutation({
         mutationFn: async () => {
-            const response = await axios.post(`${BACKEND_URL}/api/v1/content`,
+            const response = await axios.post(
+                `${BACKEND_URL}/api/v1/content`,
                 {
-                    link: linkRef.current?.value,
+                    link,
                     title: titleRef.current?.value,
-                    type,
+                    type: detectedType,
                     tags
                 },
                 { headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` } }
@@ -63,6 +84,8 @@ export function CreateContentModal({ open, onClose }) {
             queryClient.invalidateQueries({ queryKey: ["contents"] });
             setTags([]);
             setTagInput("");
+            setLink("");
+            setDetectedType(null);
             onClose();
         },
         onError: () => {
@@ -72,14 +95,13 @@ export function CreateContentModal({ open, onClose }) {
 
     if (!open) return null;
 
+    const detected = detectedType ? typeConfig[detectedType] : null;
+
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
 
             {/* Backdrop */}
-            <div
-                className="absolute inset-0 bg-black/70 backdrop-blur-sm"
-                onClick={onClose}
-            />
+            <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
 
             {/* Modal */}
             <div className="relative bg-[#0e0e14] border border-white/[0.07] rounded-2xl shadow-2xl shadow-black/60 w-full max-w-md mx-4 overflow-hidden">
@@ -114,26 +136,42 @@ export function CreateContentModal({ open, onClose }) {
                             <label className="text-xs font-semibold uppercase tracking-widest text-white/30">
                                 Title
                             </label>
-                            <Input
-                                ref={titleRef}
-                                placeholder="Give it a name..."
-                            //className="w-full bg-white/4 border border-white/8 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-white/20 focus:border-[#3088fc]/50 focus:ring-1 focus:ring-[#3088fc]/20 outline-none transition-all"
-                            />
+                            <Input ref={titleRef} placeholder="Give it a name..." />
                         </div>
 
-                        {/* Link input */}
+                        {/* Link input with platform badge */}
                         <div className="space-y-1.5">
                             <label className="text-xs font-semibold uppercase tracking-widest text-white/30">
                                 Link
                             </label>
-                            <Input
-                                ref={linkRef}
-                                placeholder="Paste your URL here..."
-                            //className="w-full bg-white/4 border border-white/8 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-white/20 focus:border-[#3088fc]/50 focus:ring-1 focus:ring-[#3088fc]/20 outline-none transition-all"
-                            />
+                            <div className="relative">
+                                <Input
+                                    value={link}
+                                    onChange={handleLinkChange}
+                                    placeholder="Paste your URL here..."
+                                    className={detected ? "pr-28" : ""}
+                                />
+                                {detected && (
+                                    <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1.5 px-2 py-1 rounded-lg bg-[#24242c] border border-white/[0.07]">
+                                        <span className="[&>svg]:w-3.5 [&>svg]:h-3.5">{detected.icon}</span>
+                                        <span className="text-[11px] font-semibold uppercase tracking-widest text-white/40">
+                                            {detected.label}
+                                        </span>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Detection status hint */}
+                            <p className="text-[11px] text-white/20">
+                                {link && !detected
+                                    ? "⚠ Platform not recognised — check the URL"
+                                    : detected
+                                        ? `✓ Detected as ${detected.label}`
+                                        : "Platform will be detected automatically"}
+                            </p>
                         </div>
 
-                        {/* Tags addding and management */}
+                        {/* Tags */}
                         <div className="space-y-1.5">
                             <label className="text-xs font-semibold uppercase tracking-widest text-white/30">Tags</label>
                             <div className="flex flex-wrap gap-1.5 bg-white/4 border border-white/8 rounded-xl px-3 py-2.5 focus-within:border-[#3088fc]/50 transition-all min-h-11">
@@ -165,38 +203,13 @@ export function CreateContentModal({ open, onClose }) {
                             </p>
                         </div>
 
-                        {/* Type selector */}
-                        <div className="space-y-2">
-                            <label className="text-xs font-semibold uppercase tracking-widest text-white/30">
-                                Content Type
-                            </label>
-                            <div className="grid grid-cols-5 gap-2">
-                                {Object.values(ContentType).map((option) => (
-                                    <button
-                                        key={option}
-                                        onClick={() => setType(option)}
-                                        className={`flex flex-col items-center gap-1.5 py-3 rounded-xl border text-center transition-all duration-200 
-                                            ${type === option
-                                                ? "bg-[#3088fc]/15 border-[#3088fc]/50 shadow-lg shadow-[#3088fc]/10"
-                                                : "bg-gray-600 border-white/[0.07] hover:border-white/20 hover:bg-white/6"
-                                            }`}
-                                    >
-                                        <span className="text-lg">{typeConfig[option].emoji}</span>
-                                        <span className={`text-[10px] font-semibold tracking-wide ${type === option ? "text-[#3088fc]" : "text-white/30"}`}>
-                                            {typeConfig[option].label}
-                                        </span>
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-
                         {/* Divider */}
                         <div className="w-full h-px bg-linear-to-r from-transparent via-white/6 to-transparent" />
 
                         {/* Submit */}
                         <button
                             onClick={() => mutate()}
-                            disabled={isPending}
+                            disabled={isPending || !detectedType}
                             className="w-full bg-[#1549e6] hover:bg-[#257cec] disabled:opacity-50 disabled:cursor-not-allowed text-white font-sans font-bold text-sm py-3 rounded-xl transition-all duration-200 active:scale-95 flex items-center justify-center gap-2"
                         >
                             {isPending ? (
@@ -218,4 +231,3 @@ export function CreateContentModal({ open, onClose }) {
         </div>
     );
 }
-
