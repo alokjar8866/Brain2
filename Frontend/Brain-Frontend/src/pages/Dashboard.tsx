@@ -115,77 +115,85 @@ export function Dashboard() {
 
 
   return (
-    <div>
-
+    <div className="flex h-screen overflow-hidden bg-zinc-900">
       <Sidebar selectedType={filter} setSelectedType={setFilter} />
 
-      <div className='p-4 ml-72 min-h-screen bg-gray-500'>
+      {/* Main Content Area: Scrollable */}
+      <div className='flex-1 ml-65 overflow-y-auto'>
+        <CreateContentModal open={modalOpen} onClose={() => setModalOpen(false)} />
 
-        <CreateContentModal open={modalOpen} onClose={() => {
-          setModalOpen(false);
-        }} />
+        {/* Sticky Header Section */}
+        <div className="sticky top-0 z-10 bg-zinc-900/80 backdrop-blur-md px-4 pt-3 pb-3 border-b border-zinc-800">
+          <div className='flex justify-between items-center bg-zinc-800/50 px-4 py-2 rounded-2xl border border-zinc-700/50 shadow-xl'>
+            
+            {/* Greeting Section */}
+            <div>
+              <h1 className="text-2xl font-bold text-white leading-tight">
+                {timeGreeting}, <span className="text-amber-300 capitalize">{displayName}</span>!
+              </h1>
+              <p className="text-zinc-400 mt-1 text-sm font-medium">
+                You have <span className="text-zinc-200">{contents.length} items</span> saved in your second brain.
+              </p>
+            </div>
 
+            {/* Action Buttons */}
+            <div className='flex gap-3'>
+              <Button
+                onClick={() => setModalOpen(true)}
+                startIcon={<PlusIcon size='lg' />}
+                size="sm"
+                variant='primary'
+                text='Add Content' />
 
-        <div className='flex justify-between items-center mb-8 bg-gray-600/30 px-4 py-2 rounded-xl border border-gray-400'>
+              <Button
+                onClick={() => shareMutation.mutate()}
+                startIcon={<ShareIcon size='lg' />}
+                size="sm"
+                variant='secondary'
+                text={shareMutation.isPending ? 'Sharing...' : 'Share'}
+              />
 
-          {/* Greeting Section */}
-          <div>
-            <h1 className="text-4xl font-extrabold text-white mt-1">
-              {timeGreeting}, <span className="text-amber-300 capitalize">{displayName}</span>!
-            </h1>
-            <p className="text-gray-300 mt-2 text-sm font-medium">
-              You have {contents.length} items saved in your second brain.
-            </p>
-          </div>
-
-          {/* Action Buttons */}
-          <div className='flex gap-4'>
-            <Button
-              onClick={() => setModalOpen(true)}
-              startIcon={<PlusIcon size='lg' />}
-              size="sm"
-              variant='primary'
-              text='Add Content' />
-
-            <Button
-              onClick={() => shareMutation.mutate()}
-              startIcon={<ShareIcon size='lg' />}
-              size="sm"
-              variant='secondary'
-              text={shareMutation.isPending ? 'Sharing...' : 'Share'}
-            />
-
-            <Button
-              onClick={() => logoutMutation.mutate()}
-              startIcon={<LogOutIcon size='md' />}
-              size="sm"
-              variant='danger'
-              text='Logout'
-            />
+              <Button
+                onClick={() => logoutMutation.mutate()}
+                startIcon={<LogOutIcon size='md' />}
+                size="sm"
+                variant='danger'
+                text='Logout'
+              />
+            </div>
           </div>
         </div>
 
-        <div className='grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-5'>
-          {isLoading && <p className="text-white">Loading your brain...</p>}
+        {/* Cards Grid Area */}
+        <div className='p-4'>
+          <div className='grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-3'>
+            {isLoading && (
+              <div className="col-span-full py-10 text-center">
+                <p className="text-zinc-500 animate-pulse">Loading your brain...</p>
+              </div>
+            )}
 
-          {
-            contents.length === 0 && !isLoading && <p className="text-white">No content found. Add some!</p>
-          }
+            {contents.length === 0 && !isLoading && (
+              <div className="col-span-full py-10 text-center">
+                <p className="text-zinc-500">No content found. Start building your brain!</p>
+              </div>
+            )}
 
-          {
-            filteredContents.map((item: any, index: number) => <Card
-              key={index || item._id}
-              type={item.type}
-              link={item.link}
-              title={item.title}
-              tags={item.tags}
-              onClick={() => {
-                if (window.confirm("Are you sure???")) {
-                  deleteMutation.mutate(item._id)
-                }
-              }}
-            />)
-          }
+            {filteredContents.map((item: any, index: number) => (
+              <Card
+                key={item._id || index}
+                type={item.type}
+                link={item.link}
+                title={item.title}
+                tags={item.tags}
+                onClick={() => {
+                  if (window.confirm("Are you sure?")) {
+                    deleteMutation.mutate(item._id)
+                  }
+                }}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </div>
