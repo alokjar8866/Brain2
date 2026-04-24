@@ -3,9 +3,12 @@ interface InputProps {
     placeholder: string;
     ref?: React.Ref<HTMLInputElement>;
     type?: string;
+    value?: string;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    className?: string; 
 }
 
-export function Input({ label, placeholder, ref, type = "text" }: InputProps) {
+export function Input({ label, placeholder, ref, type = "text", value, onChange, className }: InputProps) {
     return (
         <div className="w-full mb-4">
             {label && (
@@ -18,7 +21,9 @@ export function Input({ label, placeholder, ref, type = "text" }: InputProps) {
                     ref={ref}
                     type={type}
                     placeholder={placeholder}
-                    className="
+                    value={value}
+                    onChange={onChange}
+                    className={`
                         w-full h-10 px-4 py-3
                         bg-[#2b2b2b]
                         border border-[#3d3d3d]
@@ -29,8 +34,9 @@ export function Input({ label, placeholder, ref, type = "text" }: InputProps) {
                         focus:border-[#555]
                         focus:bg-[#333]
                         transition-all duration-150 ease-in-out
-                        pr-11
-                    "
+                        pr-11 ${className}
+                        `}
+                    
                 />
             </div>
         </div>
