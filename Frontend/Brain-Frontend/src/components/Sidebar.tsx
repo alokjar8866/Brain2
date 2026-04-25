@@ -1,38 +1,68 @@
 import { SideBarItem } from "./SideBarItem";
-import { Youtube } from "../icons/Youtube";
 import { BrainLogo } from "../icons/BrainLogo";
-import { Linkedin } from "../icons/Linkedin";
-import { Instagram } from "../icons/Instagram";
-import Facebook from "../icons/Facebook";
-import Xnew from "../icons/Xnew";
+import {
+    BookMarked,
+    FolderOpen,
+    FileText,
+    Video,
+    Newspaper,
+    Link2,
+} from "lucide-react";
 
 export function Sidebar({ selectedType, setSelectedType }: any) {
-    const menuItems = [
-        { text: "(X) Twitter", icon: <Xnew />, type: "twitter" },
-        { text: "Youtube", icon: <Youtube />, type: "youtube" },
-        { text: "LinkedIn", icon: <Linkedin />, type: "linkedin" },
-        { text: "Instagram", icon: <Instagram />, type: "instagram" },
-        { text: "Facebook", icon: <Facebook />, type: "facebook" },
+    const primaryItems = [
+        { text: "All Bookmarks", icon: <BookMarked size={18} />, type: null },
+        { text: "Unsorted", icon: <FolderOpen size={18} />, type: "unsorted" },
+    ];
+
+    const contentItems = [
+        { text: "Notes", icon: <FileText size={18} />, type: "notes" },
+        { text: "Videos", icon: <Video size={18} />, type: "videos" },
+        { text: "Articles", icon: <Newspaper size={18} />, type: "articles" },
+        { text: "Links", icon: <Link2 size={18} />, type: "links" },
     ];
 
     return (
-        <div className="pl-6 h-screen bg-zinc-600 border-r w-72 fixed left-0 top-0">
-            <div className="flex text-2xl pt-4 items-center justify-baseline font-semibold cursor-pointer"
-                onClick={() => setSelectedType(null)}> {/* Reset filter on logo click */}
-                <div className="pr-2 text-purple-600">
+        <div className="pl-2 h-screen bg-zinc-950 border-r w-65 fixed left-0 top-0">
+            {/* Logo */}
+            <div
+                className="flex items-center gap-2.5 px-2 py-2 cursor-pointer group"
+                onClick={() => setSelectedType(null)}
+            >
+                <div className="text-purple-500 transition-colors duration-150">
                     <BrainLogo />
                 </div>
-                Brain2
+                <span className="text-xl font-bold tracking-normal text-white/90 group-hover:text-white transition-colors duration-150">
+                    Brain<span className="text-pink-500 group-hover:text-purple-400 transition-colors duration-150">2</span>
+                </span>
             </div>
-            <div className="pt-8 pl-3 pr-3 flex flex-col gap-1">
-                {menuItems.map((item, index) => (
+            <div className="border-t border-white/10" />
+
+            <div className="pt-2 pl-2 pr-2 flex flex-col gap-1">
+                {/* Primary filters */}
+                {primaryItems.map((item, index) => (
                     <SideBarItem
-                        key={item.text}
+                        key={item.type}
                         text={item.text}
                         icon={item.icon}
                         active={selectedType === item.type}
                         onClick={() => setSelectedType(item.type)}
                         style={{ animationDelay: `${index * 60}ms` }}
+                    />
+                ))}
+
+                {/* Divider */}
+                <div className="my-1 border-t border-white/10" />
+
+                {/* Content type filters */}
+                {contentItems.map((item, index) => (
+                    <SideBarItem
+                        key={item.type}
+                        text={item.text}
+                        icon={item.icon}
+                        active={selectedType === item.type}
+                        onClick={() => setSelectedType(item.type)}
+                        style={{ animationDelay: `${(primaryItems.length + 1 + index) * 60}ms` }}
                     />
                 ))}
             </div>
