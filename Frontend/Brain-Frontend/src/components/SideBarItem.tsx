@@ -41,7 +41,7 @@ export function SideBarItem({ text, icon, active, onClick, style }: SideBarItemP
             <div
             onClick={onClick}
             style={style}
-            className={`group relative flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer select-none transition-all duration-150 ease-out animate-[fadeSlideIn_0.3s_ease_both]
+            className={`group relative flex items-center gap-3 px-2 py-2 rounded-lg cursor-pointer select-none transition-all duration-150 ease-out animate-[fadeSlideIn_0.3s_ease_both]
              ${active ? "bg-white/10 text-white" : "text-gray-300 hover:bg-white/5 hover:text-gray-200"} `}>
 
             <span className={`absolute left-0 top-1/2 -translate-y-1/2 w-0.75 rounded-r-full bg-blue-400 transition-all duration-150 ${active ? "h-5 opacity-100" : "h-0 opacity-0"}`} />
@@ -52,7 +52,7 @@ export function SideBarItem({ text, icon, active, onClick, style }: SideBarItemP
             </span>
 
             {/* Label */}
-            <span className="text-md font-medium tracking-wide truncate">
+            <span className="text-sm font-normal tracking-wide truncate">
                 {text}
             </span>
 
