@@ -35,7 +35,7 @@ export function SignUp() {
             navigate("/signin");
         },
         onError: (error: any) => {
-            const message = error.response?.data?.msg || "Login failed. Please try again.";
+            const message = error.response?.data?.errors[0].message || "Login failed. Please try again.";
             alert(message);
             console.log(error.response.data.errors[0].message);
         }
