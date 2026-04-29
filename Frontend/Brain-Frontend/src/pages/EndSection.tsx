@@ -56,7 +56,7 @@ function EndSection() {
 
                         {/* Title */}
                         <div>
-                            <h3 className="font-sans font-extrabold text-2xl text-[#e8e6f0] tracking-tight group-hover:text-white transition-colors duration-200">
+                            <h3 className="font-sans font-bold text-2xl text-[#e8e6f0] tracking-tight group-hover:text-white transition-colors duration-200">
                                 {title}
                             </h3>
                         </div>
