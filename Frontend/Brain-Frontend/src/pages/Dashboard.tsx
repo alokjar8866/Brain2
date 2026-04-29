@@ -125,7 +125,7 @@ export function Dashboard() {
         {/* Sticky Header Section */}
         <div className="sticky top-0 z-10 bg-zinc-900/80 backdrop-blur-md px-4 pt-3 pb-3 border-b border-zinc-800">
           <div className='flex justify-between items-center bg-zinc-800/50 px-4 py-2 rounded-2xl border border-zinc-700/50 shadow-xl'>
-            
+
             {/* Greeting Section */}
             <div>
               <h1 className="text-2xl font-bold text-white leading-tight">
@@ -170,6 +170,11 @@ export function Dashboard() {
             {isLoading && (
               <div className="col-span-full py-10 text-center">
                 <p className="text-zinc-500 animate-pulse">Loading your brain...</p>
+
+                <div className="flex items-center justify-center mt-4">
+                  <div className="w-6 h-6 rounded-full border-2 border-zinc-700 border-t-zinc-400 animate-spin" />
+                </div>
+
               </div>
             )}
 
