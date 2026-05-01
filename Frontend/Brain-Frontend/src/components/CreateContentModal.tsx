@@ -9,13 +9,21 @@ import { Instagram } from "../icons/Instagram";
 import Facebook from "../icons/Facebook";
 import { Linkedin } from "../icons/Linkedin";
 import Xnew from "../icons/Xnew";
+import GithubIcon from "../icons/GithubIcon";
+import NotionIcon from "../icons/NotionIcon";
+import MediumIcon from "../icons/MediumIcon";
+import RedditIcon from "../icons/RedditIcon";
 
 enum ContentType {
     Youtube = "youtube",
     Twitter = "twitter",
     Instagram = "instagram",
     Facebook = "facebook",
-    LinkedIn = "linkedin"
+    LinkedIn = "linkedin",
+    Github = "github",
+    Notion = "notion",
+    Medium = "medium",
+    Reddit = "reddit"
 }
 
 const typeConfig = {
@@ -24,6 +32,10 @@ const typeConfig = {
     instagram: { icon: <Instagram />, label: "Instagram", color: "#E1306C" },
     facebook: { icon: <Facebook />, label: "Facebook", color: "#1877F2" },
     linkedin: { icon: <Linkedin />, label: "LinkedIn", color: "#0A66C2" },
+    github: { icon: <GithubIcon />, label: "Github", color: "#0A66C2" },
+    notion: { icon: <NotionIcon />, label: "Notion", color: "#000000" },
+    medium: { icon: <MediumIcon />, label: "Medium", color: "#000000" },
+    reddit: { icon: <RedditIcon />, label: "Reddit", color: "#FF4500" },
 };
 
 function detectPlatform(url: string): ContentType | null {
@@ -35,6 +47,10 @@ function detectPlatform(url: string): ContentType | null {
         if (host.includes("instagram.com")) return ContentType.Instagram;
         if (host.includes("facebook.com") || host.includes("fb.com")) return ContentType.Facebook;
         if (host.includes("linkedin.com")) return ContentType.LinkedIn;
+        if (host.includes("github.com")) return ContentType.Github;
+        if (host.includes("notion.so") || host.includes("notion.site")) return ContentType.Notion;
+        if (host.includes("medium.com")) return ContentType.Medium;
+        if (host.includes("reddit.com") || host.includes("redd.it")) return ContentType.Reddit;
     } catch { }
     return null;
 }
@@ -154,7 +170,7 @@ export function CreateContentModal({ open, onClose }) {
                                 {detected && (
                                     <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1.5 px-2 py-1 rounded-lg bg-[#24242c] border border-white/[0.07]">
                                         <span className="[&>svg]:w-3.5 [&>svg]:h-3.5">{detected.icon}</span>
-                                        <span className="text-[11px] font-semibold uppercase tracking-widest text-white/40">
+                                        <span className="text-[11px] font-semibold uppercase tracking-widest text-gray-300">
                                             {detected.label}
                                         </span>
                                     </div>
