@@ -6,6 +6,7 @@ import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { BrainLogo } from "../icons/BrainLogo";
+import { toast } from "sonner";
 
 export function SignIn() {
 
@@ -34,16 +35,19 @@ export function SignIn() {
 
             if (jwt) {
                 localStorage.setItem("token", jwt);
+                toast.success("Logged In Successfully")
                 navigate("/dashboard");
-                alert("Logged In Successfully!");
+                //alert("Logged In Successfully!");
             } else {
                 console.error("Token missing in response:", data);
-                alert("Error: Token not received from server.");
+                toast.error("Error: Token not received from server.")
+                //alert("Error: Token not received from server.");
             }
         },
         onError: (error: any) => {
             const message = error.response?.data?.errors[0].message || "Login failed. Please try again.";
-            alert(message);
+            //alert(message);
+            toast.error(message);
             console.log(error.response.data.errors[0].message);
         }
     });

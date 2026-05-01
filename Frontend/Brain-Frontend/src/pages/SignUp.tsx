@@ -6,6 +6,7 @@ import { BACKEND_URL } from "../config";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { BrainLogo } from "../icons/BrainLogo";
+import { toast } from "sonner";
 
 
 export function SignUp() {
@@ -31,12 +32,14 @@ export function SignUp() {
             return response.data;
         },
         onSuccess: () => {
-            alert("Account Created Successfully.....");
+            //alert("Account Created Successfully.....");
+            toast.success("Account Created Successfully.....")
             navigate("/signin");
         },
         onError: (error: any) => {
             const message = error.response?.data?.errors[0].message || "Login failed. Please try again.";
-            alert(message);
+            //alert(message);
+            toast.error(message);
             console.log(error.response.data.errors[0].message);
         }
     });
