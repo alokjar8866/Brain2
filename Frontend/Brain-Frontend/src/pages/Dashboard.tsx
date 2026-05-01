@@ -12,12 +12,16 @@ import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
 import { LogOutIcon } from '../icons/Logout'
 import { jwtDecode } from 'jwt-decode'
+import { toast } from 'sonner'
+import { useNavigate } from 'react-router-dom'
 
 
 export function Dashboard() {
 
   const [modalOpen, setModalOpen] = useState(false);
   const queryClient = useQueryClient();
+
+  const navigate = useNavigate();
 
   const { data: contents = [], isLoading } = useQuery({
     queryKey: ['contents'],
@@ -51,7 +55,7 @@ export function Dashboard() {
   const deleteMutation = useMutation({
     mutationFn: async (contentId: string) => {
       await axios.delete(`${BACKEND_URL}/api/v1/deletecontent`, {
-        data: { contentId }, // Assuming your backend expects contentId in the body
+        data: { contentId }, // Assuming backend expects contentId in the body
         headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` }
       });
     },
@@ -67,21 +71,22 @@ export function Dashboard() {
 
   const logoutMutation = useMutation({
     mutationFn: async () => {
-      localStorage.removeItem("token");
+      await axios.post(
+        `${BACKEND_URL}/api/v1/logout`,
+        {},
+        { headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` } }
+      );
     },
     onSuccess: () => {
-      // Clear the cache so the next user doesn't see old data
+      localStorage.removeItem("token");
       queryClient.clear();
-
-      // Redirect to login page
-      window.location.href = "/signin";
+      toast.warning("Logged out successfully");
+      navigate("/signin");
     },
     onError: () => {
-      alert("An error occurred during logout.");
+      toast.error("Error in Logging Out...");
     }
   });
-
-
 
 
   const hour = new Date().getHours();
