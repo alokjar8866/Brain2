@@ -5,90 +5,106 @@ import jwt from "jsonwebtoken";
 
 const JWTPass = process.env.JWT_SECRET!;
 
-export const registerUser:RequestHandler= async(req,res)=>{
-    const {fullName, username, password} = req.body;
+export const registerUser: RequestHandler = async (req, res) => {
+    const { fullName, username, password } = req.body;
 
     const isAlreadyUser = await UserModel.findOne({
         username
     })
 
-    if(isAlreadyUser){
+    if (isAlreadyUser) {
         return res.status(400).json({
-            msg:"User already exists"
+            msg: "User already exists"
         })
     }
 
-    const hashedPassword = await bcrypt.hash(password,10);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await UserModel.create({
         fullName,
         username,
-        password:hashedPassword
+        password: hashedPassword
     })
 
     const token = jwt.sign({
-        id:user._id,
-        name:user.fullName
-    },JWTPass)
+        id: user._id,
+        name: user.fullName
+    }, JWTPass)
 
 
-    res.cookie("token",token);
+    res.cookie("token", token);
 
     res.status(201).json({
-        msg:"User resgistered successfully",
-        user:{
+        msg: "User resgistered successfully",
+        user: {
             _id: user._id,
-            username:user.username,
-            fullName:user.fullName
+            username: user.username,
+            fullName: user.fullName
         }
     })
 
-    console.log(user,token)
+    console.log(user, token)
 
 }
 
-export const logoutUser:RequestHandler = async(req,res)=>{
-    res.clearCookie("token");
-    res.status(200).json({
-        msg:"User logged out successfully"
-    });
+//=======================================================================
+//in production redis with TTL is used => for now in memory is enough
+
+const tokenBlacklist = new Set<string>();
+export const isTokenBlacklisted = (token: string) => tokenBlacklist.has(token);
+
+export const logoutUser: RequestHandler = async (req, res) => {
+    try {
+        const token = req.headers.authorization?.split(" ")[1]; // extracts token from "Bearer <token>"
+
+        if (!token) {
+            res.status(401).json({ msg: "No token provided" });
+            return;
+        }
+
+        tokenBlacklist.add(token);
+        res.status(200).json({ msg: "Logged out successfully" });
+
+    } catch (error) {
+        res.status(500).json({ msg: "Logout failed" });
+    }
 }
 
 
-export const loginUser:RequestHandler = async(req,res)=>{
-    const {username, password} = req.body;
+export const loginUser: RequestHandler = async (req, res) => {
+    const { username, password } = req.body;
     const user = await UserModel.findOne({
         username
     })
 
-    if(!user){
-       return res.status(400).json({
-            msg:"Invalid email and password"
+    if (!user) {
+        return res.status(400).json({
+            msg: "Invalid email and password"
         })
     }
 
-    const isPasswordValid = await bcrypt.compare(password,user.password!)//! it tells the ts the everthing is okay
+    const isPasswordValid = await bcrypt.compare(password, user.password!)//! it tells the ts the everthing is okay
 
-    if(!isPasswordValid){
-         return res.status(400).json({
-            msg:"Invalid email and password"
+    if (!isPasswordValid) {
+        return res.status(400).json({
+            msg: "Invalid email and password"
         })
     }
 
     const token = jwt.sign({
-            id:user._id,
-            name:user.fullName
-        },JWTPass);
-    
-        //res.cookie("token",token);
-    
-        res.status(200).json({
-            msg:"User Logged in Successfully",
-            token:token,
-            user:{
-                _id:user._id,
-                username:user.username,
-                fullName:user.fullName
-            }
-        })
+        id: user._id,
+        name: user.fullName
+    }, JWTPass);
+
+    //res.cookie("token",token);
+
+    res.status(200).json({
+        msg: "User Logged in Successfully",
+        token: token,
+        user: {
+            _id: user._id,
+            username: user.username,
+            fullName: user.fullName
+        }
+    })
 }
