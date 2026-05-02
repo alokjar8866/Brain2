@@ -1,11 +1,11 @@
 import { DeleteIcon } from "../icons/DeleteIcon";
 import { LinkLogo } from "../icons/LinkLogo";
-import { getFacebookEmbedUrl, getInstagramEmbedUrl, getLinkedInEmbedUrl, getYoutubeEmbedUrl } from "../utils/LinkModifier";
+import { getFacebookEmbedUrl, getGithubEmbedUrl, getInstagramEmbedUrl, getLinkedInEmbedUrl, getMediumEmbedUrl, getNotionEmbedUrl, getRedditEmbedUrl, getYoutubeEmbedUrl } from "../utils/LinkModifier";
 
 interface CardProps {
     title: string;
     link: string;
-    type: "twitter" | "youtube" | "linkedin" | "instagram" | "facebook";
+    type: "twitter" | "youtube" | "linkedin" | "instagram" | "facebook" | "reddit" | "notion" | "medium" |"github";
     onClick?: () => void;
     tags?: { _id: string; name: string }[];
     date?: string;
@@ -76,6 +76,39 @@ export function Card({ title, link, type, onClick, tags, date }: CardProps) {
                             allowTransparency={true}
                         ></iframe>
                     )}
+
+                    {type === "reddit" && (
+                        <iframe
+                            className="w-full min-h-50 border-none"
+                            src={getRedditEmbedUrl(link)}
+                            sandbox="allow-scripts allow-same-origin allow-popups"
+                            allowFullScreen
+                        ></iframe>
+                    )}
+
+                    {type === "notion" && (
+                        <iframe
+                            className="w-full min-h-50 border-none"
+                            src={getNotionEmbedUrl(link)}
+                            allowFullScreen
+                        ></iframe>
+                    )}
+
+
+                    {(type === "medium" || type === "github") && (
+                        <div className="w-full h-full flex items-center justify-center p-4">
+                            <a
+                                href={type === "medium" ? getMediumEmbedUrl(link) : getGithubEmbedUrl(link)}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-2 text-sm text-zinc-300 hover:text-white transition-colors underline underline-offset-2"
+                            >
+                                {type === "medium" ? "📝 Read on Medium" : "💻 View on GitHub"}
+                                <span className="text-zinc-500 text-xs truncate max-w-60">{link}</span>
+                            </a>
+                        </div>
+                    )}
+
                 </div>
 
                 {/* Footer Section */}
@@ -95,7 +128,7 @@ export function Card({ title, link, type, onClick, tags, date }: CardProps) {
 
                     <div className="flex items-center gap-4 border-t border-zinc-700/50 pt-2.5 mt-2">
 
-                        
+
                         <div className="flex items-center gap-1.5">
                             <span className="text-[10px] text-zinc-100 font-medium whitespace-nowrap">
                                 {displayDate}
