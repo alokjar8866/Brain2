@@ -12,9 +12,8 @@ export const getYoutubeEmbedUrl = (url: string) => {
 
 //Helper Function for the Facebook
 export const getFacebookEmbedUrl = (url: string) => {
-    return `https://www.facebook.com/plugins/post.php?href=${encodeURIComponent(url)}&show_text=true&width=auto`;
+   return `https://www.facebook.com/plugins/post.php?href=${encodeURIComponent(url)}&show_text=true&width=auto`;
 };
-
 
 //Helper Function for the Facebook
 export const getLinkedInEmbedUrl = (url: string) => {
@@ -27,9 +26,44 @@ export const getLinkedInEmbedUrl = (url: string) => {
 //Instagram
 export const getInstagramEmbedUrl = (url: string) => {
     // Remove query params and ensure it ends with /embed/
-    const baseUrl = url.split(/[?#]/)[0]; 
+    const baseUrl = url.split(/[?#]/)[0];
     const cleanUrl = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
     return `${cleanUrl}embed/`;
 };
 
 
+export const getMediumEmbedUrl = (url: string) => {
+    // Medium doesn't have a native embed — convert to a clean canonical URL
+    const baseUrl = url.split(/[?#]/)[0];
+    const cleanUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+    return cleanUrl;
+};
+
+export const getRedditEmbedUrl = (url: string) => {
+    // Reddit embed: strip query/hash, replace www with embed, append /?embed=true
+    const baseUrl = url.split(/[?#]/)[0];
+    const cleanUrl = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
+    const embedUrl = cleanUrl.replace(
+        /^(https?:\/\/)(www\.)?reddit\.com/,
+        '$1www.redditmedia.com'
+    );
+    return `${embedUrl}?embed=true`;
+};
+
+export const getGithubEmbedUrl = (url: string) => {
+    // GitHub has no native embed — convert to a clean permalink (no trailing slash)
+    const baseUrl = url.split(/[?#]/)[0];
+    const cleanUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+    return cleanUrl;
+};
+
+export const getNotionEmbedUrl = (url: string) => {
+    // Notion public pages: replace www.notion.so with notion.so and append ?pvs=4 for embed mode
+    const baseUrl = url.split(/[?#]/)[0];
+    const cleanUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+    const embedUrl = cleanUrl.replace(
+        /^(https?:\/\/)www\.notion\.so/,
+        '$1notion.so'
+    );
+    return `${embedUrl}?pvs=4`;
+};
