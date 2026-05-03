@@ -14,9 +14,6 @@ export function SignIn() {
     const passwordRef = useRef<HTMLInputElement>(null);
     const navigate = useNavigate();
 
-    //const username = usernameRef.current?.value;
-    //const password = passwordRef.current?.value;
-
     // 1. Define the Mutation
     const { mutate, isPending } = useMutation({
         mutationFn: async () => {
@@ -35,18 +32,15 @@ export function SignIn() {
 
             if (jwt) {
                 localStorage.setItem("token", jwt);
-                toast.success("Logged In Successfully")
+                toast.success("Logged In Successfully");
                 navigate("/dashboard");
-                //alert("Logged In Successfully!");
             } else {
                 console.error("Token missing in response:", data);
-                toast.error("Error: Token not received from server.")
-                //alert("Error: Token not received from server.");
+                toast.error("Error: Token not received from server.");
             }
         },
         onError: (error: any) => {
             const message = error.response?.data?.errors[0].message || "Login failed. Please try again.";
-            //alert(message);
             toast.error(message);
             console.log(error.response.data.errors[0].message);
         }
