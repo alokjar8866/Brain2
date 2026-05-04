@@ -196,6 +196,11 @@ export function Dashboard() {
                 link={item.link}
                 title={item.title}
                 tags={item.tags}
+                date={new Date(item.createdAt).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric"
+                })}
                 onClick={() => {
                   if (window.confirm("Are you sure?")) {
                     deleteMutation.mutate(item._id)
