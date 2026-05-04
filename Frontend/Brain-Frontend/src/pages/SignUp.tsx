@@ -65,7 +65,9 @@ export function SignUp() {
                         <div className="w-9 h-9 rounded-xl bg-[#3088fc] flex items-center justify-center shadow-lg shadow-[#3088fc]/30">
                             <BrainLogo className="w-5 h-5 text-white" />
                         </div>
-                        <span className="font-syne font-extrabold text-xl text-white tracking-tight">Brain2</span>
+                         <span className="text-xl font-extrabold tracking-normal text-white/90">
+                            Brain<span className="text-pink-500">2</span>
+                        </span>
                     </div>
 
                     {/* Title */}
