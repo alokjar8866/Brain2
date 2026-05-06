@@ -1,0 +1,46 @@
+//Older auth middleware 
+
+/** export const userAuthMiddle: RequestHandler = async (req, res, next:NextFunction) => {
+    //const token = req.cookies.token;
+    const authHeader = req.headers["authorization"];
+    //const token = req.headers["authorization"];
+    if (!authHeader || typeof authHeader !== "string") {
+        return res.status(403).json({ message: "Invalid Authorization Header" });
+    }
+    const token = authHeader && authHeader.split(" ")[1];
+    if (!token) {
+        return res.status(401).json({
+            msg: "Please Create Account & Login First"
+        })
+    }
+
+    if (isTokenBlacklisted(token)) {
+        console.log("Token Blacklisted");
+        res.status(401).json({ msg: "Token has been invalidated, please login again" });
+        return;
+    }
+
+
+    try {
+        const JWTPass = process.env.JWT_SECRET;
+        const decoded = jwt.verify(token as string,JWTPass as string);
+        
+        if(decoded){
+            if(typeof decoded === "string"){
+                res.status(403).json({
+                    message:"You are not logged in"
+                })
+                return;
+            }
+            req.userId = (decoded as JwtPayload).id;
+            next();
+        }
+    }
+    catch(err){
+        return res.status(401).json({
+            msg:"You are not logged in"
+        })
+    }
+
+    
+} **/
