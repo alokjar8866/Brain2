@@ -3,7 +3,7 @@ import { Button } from "../components/Button";
 import { Input } from "../components/Input";
 import axios from "axios";
 import { BACKEND_URL } from "../config";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { BrainLogo } from "../icons/BrainLogo";
 import { toast } from "sonner";
@@ -108,9 +108,9 @@ export function SignUp() {
                 {/* Footer */}
                 <p className="mt-6 text-center text-xs text-white/30">
                      Already have an account ? Please{' '}
-                    <a href="./signin" className="text-[#3088fc] hover:text-[#4a98ff] font-medium transition-colors">
+                    <Link to="/signin" className="text-[#3088fc] hover:text-[#4a98ff] font-medium transition-colors">
                        Sign in
-                    </a>
+                    </Link>
                 </p>
             </div>
 
