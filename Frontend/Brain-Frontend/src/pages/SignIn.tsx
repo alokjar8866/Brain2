@@ -3,13 +3,14 @@ import { Button } from "../components/Button"
 import axios from "axios";
 import { BACKEND_URL } from "../config";
 import { useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { BrainLogo } from "../icons/BrainLogo";
 import { toast } from "sonner";
 
-export function SignIn() {
 
+export function SignIn() {
+    
     const usernameRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
     const navigate = useNavigate();
@@ -105,9 +106,9 @@ export function SignIn() {
                 {/* Footer */}
                 <p className="mt-6 text-center text-xs text-white/30">
                     New here?{' '}
-                    <a href="./signup" className="text-[#3088fc] hover:text-[#4a98ff] font-medium transition-colors">
+                    <Link to="/signup" className="text-[#3088fc] hover:text-[#4a98ff] font-medium transition-colors">
                         Create an account →
-                    </a>
+                    </Link>
                 </p>
             </div>
 
