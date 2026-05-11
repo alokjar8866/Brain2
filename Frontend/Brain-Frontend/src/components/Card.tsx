@@ -1,17 +1,19 @@
 import { DeleteIcon } from "../icons/DeleteIcon";
+import EditLogo from "../icons/EditLogo";
 import { LinkLogo } from "../icons/LinkLogo";
 import { getFacebookEmbedUrl, getGithubEmbedUrl, getInstagramEmbedUrl, getLinkedInEmbedUrl, getMediumEmbedUrl, getNotionEmbedUrl, getRedditEmbedUrl, getYoutubeEmbedUrl } from "../utils/LinkModifier";
 
 interface CardProps {
     title: string;
     link: string;
-    type: "twitter" | "youtube" | "linkedin" | "instagram" | "facebook" | "reddit" | "notion" | "medium" |"github";
-    onClick?: () => void;
+    type: "twitter" | "youtube" | "linkedin" | "instagram" | "facebook" | "reddit" | "notion" | "medium" | "github";
+    onDelete?: () => void;
+    onEdit?: () => void;
     tags?: { _id: string; name: string }[];
     date?: string;
 }
 
-export function Card({ title, link, type, onClick, tags, date }: CardProps) {
+export function Card({ title, link, type, onDelete, onEdit, tags, date }: CardProps) {
     const displayDate = date || new Date().toLocaleDateString('en-US', {
         month: 'short',
         day: 'numeric',
@@ -31,7 +33,15 @@ export function Card({ title, link, type, onClick, tags, date }: CardProps) {
                         </h3>
                     </div>
                     <div className="flex items-center gap-1 shrink-0">
+                        <button
+                            title="Edit"
+                            onClick={onEdit}
+                            className="text-zinc-500 hover:cursor-pointer hover:text-red-400 transition-colors p-1"
+                        >
+                            <EditLogo size="lg" />
+                        </button>
                         <a
+                            title="Open Link"
                             href={link}
                             target="_blank"
                             rel="noreferrer"
@@ -40,8 +50,9 @@ export function Card({ title, link, type, onClick, tags, date }: CardProps) {
                             <LinkLogo size="lg" />
                         </a>
                         <button
-                            onClick={onClick}
-                            className="text-zinc-500 hover:text-red-400 transition-colors p-1"
+                            title="Delete"
+                            onClick={onDelete}
+                            className="text-zinc-500 hover:cursor-pointer hover:text-red-400 transition-colors p-1"
                         >
                             <DeleteIcon size="lg" />
                         </button>
