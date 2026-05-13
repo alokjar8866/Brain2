@@ -158,3 +158,51 @@ export const getTags: RequestHandler = async (req, res) => {
         res.status(500).json({ message: "Failed to fetch tags" });
     }
 };
+
+
+export const updateContent: RequestHandler = async (req, res) => {
+    try {
+        const contentId = req.params.id;
+        const { title, link, type, tags = [] } = req.body;
+        const userId = req.userId;
+
+        if (!userId) {
+            res.status(403).json({ message: "User not authenticated" });
+            return;
+        }
+
+       
+        const tagIds = await Promise.all(
+            tags.map(async (name: string) => {
+                const tag = await TagModel.findOneAndUpdate(
+                    { name: name.toLowerCase().trim(), userId },
+                    { name: name.toLowerCase().trim(), userId },
+                    { upsert: true, new: true }
+                );
+                return tag._id;
+            })
+        );
+
+        const updated = await ContentModel.findOneAndUpdate(
+            { _id: contentId, userId }, 
+            { title, link, type, tags: tagIds },
+            { new: true }                 // returns updated doc
+        ).populate("tags", "name");
+
+        if (!updated) {
+            res.status(404).json({ message: "Content not found" });
+            return;
+        }
+
+        res.json({
+            message: "Content updated successfully",
+            content: updated
+        });
+
+    } catch (err) {
+        res.status(500).json({
+            message: "Failed to update content",
+            error: err instanceof Error ? err.message : "Unknown error"
+        });
+    }
+}
