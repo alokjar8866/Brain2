@@ -4,7 +4,7 @@ import { loginUser, logoutUser, registerUser } from './controllers/auth.controll
 import cookieParser from 'cookie-parser';
 import connectDB from './dbConnect/db.js';
 import { userAuthMiddle } from './middlewares/authMiddle.js';
-import { createContent, deleteContent, getContent, shareContent, shareLink } from './controllers/content.controller.js';
+import { createContent, deleteContent, getContent, shareContent, shareLink, updateContent } from './controllers/content.controller.js';
 import cors from "cors";
 import { validate } from './middlewares/validate.js';
 import { loginSchema, registerSchema } from './schemas/auth.schema.js';
@@ -30,6 +30,8 @@ app.post('/api/v1/getContent', userAuthMiddle, getContent);
 app.delete('/api/v1/deletecontent', userAuthMiddle, deleteContent);
 app.post('/api/v1/brain/share', userAuthMiddle, shareContent);
 app.post('/api/v1/brain/:shareLink', userAuthMiddle, shareLink);
+
+app.put('/api/v1/updateContent/:id',userAuthMiddle, updateContent);
 
 
 
