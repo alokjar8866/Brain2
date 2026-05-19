@@ -16,9 +16,9 @@ app.use(cors());
 
 connectDB();
 
-app.get('/',function (req,res){
-    res.json({
-        "msg":"hello server started"
+app.get('/health',function (req,res){
+    res.status(200).json({
+        "msg":"Server is working fine....OK"
     })
 })
 app.post('/api/v1/signup',validate(registerSchema),registerUser);
