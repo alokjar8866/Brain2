@@ -5,7 +5,7 @@ function Section() {
   const typedText = useTypewriter();
 
   return <div className="flex flex-col md:flex-row gap-1">
-    <div className="w-full md:basis-[55%] bg-zinc-950">
+    <div className="w-full md:basis-[52%] bg-zinc-950">
       <div className="p-12 flex flex-col">
         <div className="px-6 ml-2 w-fit inline-block text-lg text-blue-800 font-bold border-2 bg-black border-blue-900 rounded-2xl">Your Second Brain - Online</div>
         { /* <div className="p-10 text-5xl text-wrap text-white font-medium">
@@ -26,21 +26,23 @@ function Section() {
           <span className="font-normal text-white text-xl">Brain2 is your personal library for the internet. Capture articles, videos, links, and posts — then share or revisit them anytime</span>
         </div>
         <div className="px-6 py-5 flex flex-row gap-4">
-          <Link 
-          to="/signin"
-          className="bg-blue-700 text-white font-bold w-12vw py-2 px-4 rounded-xl hover:bg-blue-800 hover:border-white hover:border-2">
+          <Link
+            to="/signin"
+            className="bg-blue-700 text-white font-bold w-12vw py-2 px-6 rounded-xl hover:bg-blue-800 hover:border-white hover:border-2">
             Login
           </Link>
           <Link
-          to="/signup"
-           className="bg-white border-2 border-amber-100 text-black font-bold py-2 px-4 rounded-xl hover:text-white hover:bg-blue-800">
+            to="/signup"
+            className="bg-white border-2 border-amber-100 text-black font-bold py-2 px-4 rounded-xl hover:text-white hover:bg-blue-800">
             Sign Up
           </Link>
         </div>
       </div>
     </div>
-    <div className="w-full md:basis-[45%] bg-zinc-900 text-white">
-      video demo.
+    <div className="w-full md:basis-[48%] bg-zinc-950 text-white flex items-center justify-center">
+      <video autoPlay loop muted playsInline className="w-full h-full rounded-2xl border border-[#1549e6]">
+        <source src="/demoVid.webm" type="video/webm" />
+      </video>
     </div>
   </div>
 }
