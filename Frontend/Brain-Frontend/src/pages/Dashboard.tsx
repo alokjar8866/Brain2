@@ -14,6 +14,8 @@ import { LogOutIcon } from '../icons/Logout'
 import { jwtDecode } from 'jwt-decode'
 import { toast } from 'sonner'
 import { useNavigate } from 'react-router-dom'
+import { CATEGORY_MAP } from '../utils/typeMap'
+import { EditContentModal } from '../components/editContentModal'
 
 
 export function Dashboard() {
@@ -114,10 +116,19 @@ export function Dashboard() {
 
   //for filteration of contents 
   const [filter, setFilter] = useState<string | null>(null);
-  const filteredContents = filter
+  /*const filteredContents = filter
     ? contents.filter((item: any) => item.type.toLowerCase() === filter.toLowerCase())
-    : contents;
+    : contents; */
 
+  const filteredContents = contents?.filter((item: any) => {
+    if (!filter || filter === "unsorted") return true;
+    const allowed = CATEGORY_MAP[filter];
+    if (!allowed) return true;
+    return allowed.includes(item.type);
+  });
+
+
+  const [editTarget, setEditTarget] = useState<any>(null);
 
   return (
     <div className="flex h-screen overflow-hidden bg-zinc-900">
@@ -126,6 +137,13 @@ export function Dashboard() {
       {/* Main Content Area: Scrollable */}
       <div className='flex-1 ml-65 overflow-y-auto'>
         <CreateContentModal open={modalOpen} onClose={() => setModalOpen(false)} />
+        <EditContentModal
+          open={!!editTarget}
+          onClose={() => setEditTarget(null)}
+          contentId={editTarget?._id ?? ""}
+          initialTitle={editTarget?.title ?? ""}
+          initialTags={editTarget?.tags ?? []}
+        />
 
         {/* Sticky Header Section */}
         <div className="sticky top-0 z-10 bg-zinc-900/80 backdrop-blur-md px-4 pt-3 pb-3 border-b border-zinc-800">
@@ -201,7 +219,9 @@ export function Dashboard() {
                   month: "short",
                   day: "numeric"
                 })}
-                onClick={() => {
+                //onEdit={() => alert('under dev')}
+                onEdit={() => setEditTarget(item)}
+                onDelete={() => {
                   if (window.confirm("Are you sure?")) {
                     deleteMutation.mutate(item._id)
                   }
