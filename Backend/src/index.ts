@@ -28,12 +28,11 @@ app.post('/api/v1/logout',logoutUser);
 app.post('/api/v1/content', userAuthMiddle, createContent);
 app.post('/api/v1/getContent', userAuthMiddle, getContent);
 app.delete('/api/v1/deletecontent', userAuthMiddle, deleteContent);
-app.post('/api/v1/brain/share', userAuthMiddle, shareContent);
-app.post('/api/v1/brain/:shareLink', userAuthMiddle, shareLink);
-
 app.put('/api/v1/updateContent/:id',userAuthMiddle, updateContent);
 
-
+app.post('/api/v1/brain/share', userAuthMiddle, shareContent);
+app.post('/api/v1/brain/:shareLink', shareLink);
+//app.post('/api/v1/brain/:shareLink', userAuthMiddle, shareLink);
 
 const PORT = process.env.PORT;
 app.listen(PORT,()=>{
