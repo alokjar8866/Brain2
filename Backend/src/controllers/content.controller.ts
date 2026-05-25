@@ -118,8 +118,7 @@ export const shareContent: RequestHandler = async (req, res) => {
 
 export const shareLink: RequestHandler = async (req, res) => {
     const hash = req.params.shareLink;
-
-
+    
     if (!hash) {
         throw new Error("User not authenticated");
     }
