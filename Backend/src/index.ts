@@ -31,7 +31,7 @@ app.delete('/api/v1/deletecontent', userAuthMiddle, deleteContent);
 app.put('/api/v1/updateContent/:id',userAuthMiddle, updateContent);
 
 app.post('/api/v1/brain/share', userAuthMiddle, shareContent);
-app.post('/api/v1/brain/:shareLink', shareLink);
+app.post('/api/v1/brain/shared/:shareLink', shareLink);
 //app.post('/api/v1/brain/:shareLink', userAuthMiddle, shareLink);
 
 const PORT = process.env.PORT;
