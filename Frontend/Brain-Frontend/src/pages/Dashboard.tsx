@@ -15,7 +15,7 @@ import { jwtDecode } from 'jwt-decode'
 import { toast } from 'sonner'
 import { useNavigate } from 'react-router-dom'
 import { CATEGORY_MAP } from '../utils/typeMap'
-import { EditContentModal } from '../components/editContentModal'
+import { EditContentModal } from '../components/EditContentModal'
 
 
 export function Dashboard() {
@@ -46,7 +46,7 @@ export function Dashboard() {
       return response.data;
     },
     onSuccess: (data) => {
-      const shareUrl = `http://localhost:5173/brain/${data.hash}`;
+      const shareUrl = `http://localhost:5173/brain/shared/${data.hash}`;
       alert(`Share this link: ${shareUrl}`);
     },
     onError: () => {

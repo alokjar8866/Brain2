@@ -11,7 +11,7 @@ export function SharedBrainPage() {
     const { data, isLoading, isError } = useQuery({
         queryKey: ["shared", shareLink],
         queryFn: async () => {
-            const res = await axios.post(`${BACKEND_URL}/api/v1/brain/${shareLink}`);
+            const res = await axios.post(`${BACKEND_URL}/api/v1/brain/shared/${shareLink}`);
             return res.data; // { username, content[] }
         }
     });
