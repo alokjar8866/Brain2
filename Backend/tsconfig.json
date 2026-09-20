@@ -4,12 +4,13 @@
     // File Layout
     "rootDir": "./src",
     "outDir": "./dist",
-
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
     "module": "nodenext",
     "target": "esnext",
-    "types":[],
+    "types": [
+      "node"
+    ],
     "typeRoots": [
       "./node_modules/@types", //Remove this to go back at checkpoint 1
       "./src/types"
@@ -18,16 +19,13 @@
     // "lib": ["esnext"],
     // "types": ["node"],
     // and npm install -D @types/node
-
     // Other Outputs
     "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
-
     // Stricter Typechecking Options
     "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,  //checkpoint 1
-
+    "exactOptionalPropertyTypes": true, //checkpoint 1
     // Style Options
     // "noImplicitReturns": true,
     // "noImplicitOverride": true,
@@ -35,7 +33,6 @@
     // "noUnusedParameters": true,
     // "noFallthroughCasesInSwitch": true,
     // "noPropertyAccessFromIndexSignature": true,
-
     // Recommended Options
     "strict": true,
     "jsx": "react-jsx",
@@ -45,7 +42,6 @@
     "moduleDetection": "force",
     "skipLibCheck": true,
   },
-
   "include": [
     "src/**/*" //Remove to go back checkpoint 1
   ]
