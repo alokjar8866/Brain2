@@ -11,7 +11,6 @@ function App() {
   return <BrowserRouter>
     <Toaster position="bottom-right" richColors duration={3000} theme="system" />
     <Routes>
-      <Route path="/home" element={<PreLanding />} />
       <Route path="/home2" element={<LandingPage />} />
       <Route path="/signup" element={<SignUp />} />
       <Route path="/signin" element={<SignIn />} />
