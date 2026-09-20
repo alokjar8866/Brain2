@@ -55,7 +55,12 @@ function detectPlatform(url: string): ContentType | null {
     return null;
 }
 
-export function CreateContentModal({ open, onClose }) {
+interface CreateContentModal{
+    open : boolean;
+    onClose: ()=>void;
+}
+
+export function CreateContentModal({ open, onClose }:CreateContentModal) {
     const queryClient = useQueryClient();
     const titleRef = useRef<HTMLInputElement>(null);
 
