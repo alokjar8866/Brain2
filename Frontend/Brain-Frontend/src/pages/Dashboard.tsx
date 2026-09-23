@@ -6,7 +6,7 @@ import { ShareIcon } from '../icons/ShareIcon'
 import { CreateContentModal } from '../components/CreateContentModal'
 import { Sidebar } from '../components/Sidebar'
 import axios from 'axios'
-import { BACKEND_URL } from '../config'
+import { BACKEND_URL, FRONTEND_URL } from '../config'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
@@ -46,7 +46,8 @@ export function Dashboard() {
       return response.data;
     },
     onSuccess: (data) => {
-      const shareUrl = `http://localhost:5173/brain/shared/${data.hash}`;
+      //const shareUrl = `http://localhost:5173/brain/shared/${data.hash}`;
+      const shareUrl = `${FRONTEND_URL}/brain/shared/${data.hash}`;
       alert(`Share this link: ${shareUrl}`);
     },
     onError: () => {
