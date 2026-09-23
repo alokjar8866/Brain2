@@ -21,7 +21,6 @@ import { EditContentModal } from '../components/EditContentModal'
 export function Dashboard() {
 
   const [modalOpen, setModalOpen] = useState(false);
-  const [shareUrl, setShareUrl] = useState<string | null>(null);
   const queryClient = useQueryClient();
 
   const navigate = useNavigate();
@@ -47,11 +46,26 @@ export function Dashboard() {
       return response.data;
     },
     onSuccess: (data) => {
-      //const shareUrl = `http://localhost:5173/brain/shared/${data.hash}`;
       const url = `${FRONTEND_URL}/brain/shared/${data.hash}`;
-      //alert(`Share this link: ${shareUrl}`);
-      setShareUrl(url); // store in state instead of alert
-      console.log(url);
+
+      toast(
+        <div className="flex items-center gap-3">
+          <span className="truncate max-w-xs">{url}</span>
+
+          <button
+            onClick={() => {
+              navigator.clipboard.writeText(url);
+              toast.success("Copied!");
+            }}
+            className="px-2 py-1 bg-amber-500 rounded text-black text-sm"
+          >
+            Copy
+          </button>
+        </div>,
+        {
+          duration: 5000,
+        }
+      );
     },
     onError: () => {
       alert("Failed to generate share link.");
@@ -190,25 +204,6 @@ export function Dashboard() {
             </div>
           </div>
         </div>
-
-        
-        {shareUrl && (
-          <div className="mt-3 flex items-center gap-2 bg-zinc-800 p-2 rounded">
-            <input
-              type="text"
-              value={shareUrl}
-              readOnly
-              className="flex-1 px-2 py-1 bg-zinc-900 text-white rounded"
-              onFocus={(e) => e.target.select()} // lets user highlight easily
-            />
-            <Button
-              onClick={() => navigator.clipboard.writeText(shareUrl)}
-              size="sm"
-              variant="secondary"
-              text="Copy"
-            />
-          </div>
-        )}
 
 
         {/* Cards Grid Area */}
