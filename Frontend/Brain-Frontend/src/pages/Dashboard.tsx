@@ -21,6 +21,8 @@ import { EditContentModal } from '../components/EditContentModal'
 export function Dashboard() {
 
   const [modalOpen, setModalOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [shareUrl, setShareUrl] = useState<string | null>(null);
   const queryClient = useQueryClient();
 
   const navigate = useNavigate();
@@ -47,25 +49,8 @@ export function Dashboard() {
     },
     onSuccess: (data) => {
       const url = `${FRONTEND_URL}/brain/shared/${data.hash}`;
-
-      toast(
-        <div className="flex items-center gap-3">
-          <span className="truncate max-w-xs">{url}</span>
-
-          <button
-            onClick={() => {
-              navigator.clipboard.writeText(url);
-              toast.success("Copied!");
-            }}
-            className="px-2 py-1 bg-amber-500 rounded text-black text-sm"
-          >
-            Copy
-          </button>
-        </div>,
-        {
-          duration: 5000,
-        }
-      );
+      setShareUrl(url);
+      setCopied(false);
     },
     onError: () => {
       alert("Failed to generate share link.");
@@ -108,6 +93,18 @@ export function Dashboard() {
     }
   });
 
+  const copyShareLink = async () => {
+    if (!shareUrl) return;
+
+    await navigator.clipboard.writeText(shareUrl);
+
+    setCopied(true);
+
+    setTimeout(() => {
+      setCopied(false);
+      setShareUrl(null); // closes modal after copy
+    }, 1500);
+  };
 
   const hour = new Date().getHours();
   const timeGreeting = hour < 12 ? "Good Morning" : hour < 18 ? "Good Afternoon" : "Good Evening";
@@ -162,6 +159,59 @@ export function Dashboard() {
           initialTitle={editTarget?.title ?? ""}
           initialTags={editTarget?.tags ?? []}
         />
+
+        {shareUrl && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            {/* Backdrop */}
+            <div
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+              onClick={() => setShareUrl(null)}
+            />
+
+            {/* Modal */}
+            <div
+              className={`relative w-137.5 max-w-[92vw] rounded-3xl border border-zinc-700 bg-zinc-900 p-6 shadow-2xl transition-all duration-300 ${copied
+                  ? "opacity-0 scale-95"
+                  : "opacity-100 scale-100"
+                }`}
+            >
+              <h2 className="text-xl font-bold text-white">
+                Share Your Second Brain
+              </h2>
+
+              <p className="mt-2 text-sm text-zinc-400">
+                Anyone with this link can access your shared content.
+              </p>
+
+              <div className="mt-5 flex gap-3">
+                <input
+                  type="text"
+                  value={shareUrl}
+                  readOnly
+                  onFocus={(e) => e.target.select()}
+                  className="flex-1 rounded-xl border border-zinc-700 bg-zinc-800 px-4 py-3 text-white outline-none"
+                />
+
+                <button
+                  onClick={copyShareLink}
+                  className={`rounded-xl px-5 py-3 font-semibold transition-all duration-300 ${copied
+                      ? "bg-green-500 text-white"
+                      : "bg-amber-400 text-black hover:bg-amber-300"
+                    }`}
+                >
+                  {copied ? "✓ Copied" : "Copy"}
+                </button>
+              </div>
+
+              <button
+                onClick={() => setShareUrl(null)}
+                className="absolute right-4 top-4 text-zinc-500 hover:text-white"
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Sticky Header Section */}
         <div className="sticky top-0 z-10 bg-zinc-900/80 backdrop-blur-md px-4 pt-3 pb-3 border-b border-zinc-800">
