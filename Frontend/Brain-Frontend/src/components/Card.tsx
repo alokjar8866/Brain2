@@ -36,7 +36,7 @@ export function Card({ title, link, type, onDelete, onEdit, tags, date }: CardPr
                         <button
                             title="Edit"
                             onClick={onEdit}
-                            className="text-zinc-500 hover:cursor-pointer hover:text-red-400 transition-colors p-1"
+                            className="text-zinc-100 hover:cursor-pointer hover:text-red-400 transition-colors p-1"
                         >
                             <EditLogo size="lg" />
                         </button>
@@ -45,14 +45,14 @@ export function Card({ title, link, type, onDelete, onEdit, tags, date }: CardPr
                             href={link}
                             target="_blank"
                             rel="noreferrer"
-                            className="text-zinc-500 hover:text-blue-400 transition-colors p-1"
+                            className="text-zinc-100 hover:text-blue-400 transition-colors p-1"
                         >
                             <LinkLogo size="lg" />
                         </a>
                         <button
                             title="Delete"
                             onClick={onDelete}
-                            className="text-zinc-500 hover:cursor-pointer hover:text-red-400 transition-colors p-1"
+                            className="text-zinc-100 hover:cursor-pointer hover:text-red-400 transition-colors p-1"
                         >
                             <DeleteIcon size="lg" />
                         </button>
