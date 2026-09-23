@@ -189,14 +189,14 @@ export function Dashboard() {
                   value={shareUrl}
                   readOnly
                   onFocus={(e) => e.target.select()}
-                  className="flex-1 rounded-xl border border-zinc-700 bg-zinc-800 px-4 py-3 text-white outline-none"
+                  className="flex-1 rounded-xl border border-zinc-700 bg-zinc-800 px-3 py-2 text-white outline-none"
                 />
 
                 <button
                   onClick={copyShareLink}
-                  className={`rounded-xl px-5 py-3 font-semibold transition-all duration-300 ${copied
+                  className={`rounded-xl px-5 py-2 font-semibold transition-all duration-300 ${copied
                       ? "bg-green-500 text-white"
-                      : "bg-amber-400 text-black hover:bg-amber-300"
+                      : "bg-[#193cb8] text-black hover:bg-blue-400"
                     }`}
                 >
                   {copied ? "✓ Copied" : "Copy"}
